@@ -1,6 +1,7 @@
 ﻿using System;
 using Game.Runtime.GameLoop;
 using Game.Runtime.Input.Ship;
+using Game.Runtime.Physics;
 using UnityEngine;
 
 namespace Game.Runtime.Ship
@@ -13,7 +14,7 @@ namespace Game.Runtime.Ship
         
         private Vector3 _velocity;
 
-        private const float MovementThreshold = 0.001f;
+        private const float MovementThreshold = 0.01f;
 
         public ShipModel(ShipVisualization shipVisualization, IShipInput input, ShipStats stats)
         {
@@ -52,6 +53,11 @@ namespace Game.Runtime.Ship
         public void Dispose()
         {
             _shipVisualization.Dispose();
+        }
+
+        private void OnCollision(IRigidbody rigidbody)
+        {
+            
         }
     }
 }
