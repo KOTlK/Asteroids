@@ -1,4 +1,5 @@
 ﻿using System;
+using Game.Runtime.Ship.Hp;
 using Game.Runtime.View.Ship;
 using UnityEngine;
 
@@ -15,15 +16,17 @@ namespace Game.Runtime.Ship
             _shipInterface = shipInterface;
         }
 
-        public void Move(Vector3 direction)
+        public Vector3 Position
         {
-            _view.Position += direction;
+            get => _view.Position;
+            set => _view.Position = value;
         }
 
-        public void DrawUi(Vector3 velocity)
+        public void DrawUi(Vector3 velocity, IHealth health)
         {
             _shipInterface.DisplayPosition(_view.Position);
             _shipInterface.DisplayVelocity(velocity);
+            health.Visualize(_shipInterface);
         }
 
         public void Dispose()

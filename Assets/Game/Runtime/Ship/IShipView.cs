@@ -4,7 +4,7 @@ using UnityEngine;
 
 namespace Game.Runtime.Ship
 {
-    public interface IShipView : IDisposable, IRigidbody
+    public interface IShipView : IDisposable
     {
         Vector3 Position { get; set; }
     }

@@ -7,6 +7,7 @@ namespace Game.Runtime.View.Ship
     {
         [SerializeField] private TMP_Text _velocity;
         [SerializeField] private TMP_Text _position;
+        [SerializeField] private TMP_Text _health;
         
         public void DisplayVelocity(Vector3 velocity)
         {
@@ -16,6 +17,11 @@ namespace Game.Runtime.View.Ship
         public void DisplayPosition(Vector3 position)
         {
             _position.text = $"{position}";
+        }
+
+        public void Display(float amount)
+        {
+            _health.text = amount.ToString();
         }
     }
 }

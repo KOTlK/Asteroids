@@ -1,7 +1,9 @@
 ﻿using System;
 using System.Linq;
 using Game.Runtime.Input.Ship;
+using Game.Runtime.Physics;
 using Game.Runtime.Ship;
+using Game.Runtime.Ship.Hp;
 using Game.Runtime.View.Ship;
 using UnityEngine;
 
@@ -12,7 +14,7 @@ namespace Game.Runtime.Factories
         [SerializeField] private ShipReference[] _shipReferences;
         [SerializeField] private ShipInterface _interface;
 
-        public ShipModel Create(ShipType type, IShipInput input)
+        public ShipModel Create(ShipType type, IShipInput input, ICollider collider)
         {
             var reference = _shipReferences.First(shipReference => shipReference.Type == type);
             var view = Instantiate(reference.View);
@@ -20,6 +22,8 @@ namespace Game.Runtime.Factories
                 new ShipVisualization(
                     view,
                     _interface),
+                collider,
+                new Health(reference.Stats.MaxHealth),
                 input,
                 reference.Stats);
         }

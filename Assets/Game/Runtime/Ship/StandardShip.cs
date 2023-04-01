@@ -7,7 +7,7 @@ namespace Game.Runtime.Ship
     [RequireComponent(typeof(Rigidbody2D))]
     public class StandardShip : MonoBehaviour, IShipView
     {
-        public event Action<IRigidbody> Collided = delegate {  };
+        public Type Origin => typeof(ShipModel);
 
         public Vector3 Position
         {
@@ -22,10 +22,7 @@ namespace Game.Runtime.Ship
 
         private void OnTriggerEnter2D(Collider2D col)
         {
-            if (col.TryGetComponent(out IRigidbody rigidbody))
-            {
-                Collided(rigidbody);
-            }
         }
+
     }
 }

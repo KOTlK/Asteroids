@@ -8,5 +8,6 @@ namespace Game.Runtime.Ship
         public float MaxSpeed;
         public float Acceleration;
         public float Damping;
+        public float MaxHealth;
     }
 }

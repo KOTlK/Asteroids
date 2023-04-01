@@ -2,6 +2,7 @@
 using Game.Runtime.GameLoop;
 using Game.Runtime.Input.Ship;
 using Game.Runtime.Physics;
+using Game.Runtime.Ship.Hp;
 using UnityEngine;
 
 namespace Game.Runtime.Ship
@@ -9,18 +10,23 @@ namespace Game.Runtime.Ship
     public class ShipModel : ILoop, IDisposable
     {
         private readonly ShipVisualization _shipVisualization;
+        private readonly ICollider _collider;
+        private readonly IHealth _health;
         private readonly ShipStats _stats;
         private readonly IShipInput _input;
         
         private Vector3 _velocity;
+        private Vector3 _position;
 
         private const float MovementThreshold = 0.01f;
 
-        public ShipModel(ShipVisualization shipVisualization, IShipInput input, ShipStats stats)
+        public ShipModel(ShipVisualization shipVisualization, ICollider collider, IHealth health, IShipInput input, ShipStats stats)
         {
             _shipVisualization = shipVisualization;
-            _input = input;
+            _collider = collider;
+            _health = health;
             _stats = stats;
+            _input = input;
         }
 
         public void Execute(float deltaTime)
@@ -46,18 +52,19 @@ namespace Game.Runtime.Ship
                     _velocity.y = 0;
             }
 
-            _shipVisualization.Move(_velocity * deltaTime);
-            _shipVisualization.DrawUi(_velocity);
+            _position += _velocity * deltaTime;
+            _collider.Position = _position;
+            _shipVisualization.Position = _position;
+            _shipVisualization.DrawUi(_velocity, _health);
         }
+
+        public void ApplyDamage(float amount) => _health.Lose(amount);
+
+        public void RestoreHealth(float amount) => _health.Restore(amount);
 
         public void Dispose()
         {
             _shipVisualization.Dispose();
-        }
-
-        private void OnCollision(IRigidbody rigidbody)
-        {
-            
         }
     }
 }
