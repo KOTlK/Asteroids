@@ -1,7 +1,9 @@
-﻿using Game.Runtime.Input.Ship;
+﻿using Game.Runtime.Enemies;
+using Game.Runtime.GameLoop;
+using Game.Runtime.Input.Ship;
 using Game.Runtime.Physics;
 using Game.Runtime.Ship;
-using Game.Runtime.Ship.Weapons;
+using Game.Runtime.View.Viewport;
 using UnityEngine;
 
 namespace Game.Runtime.Application
@@ -10,9 +12,10 @@ namespace Game.Runtime.Application
     {
         [SerializeField] private Factories.Factories _factories;
         [SerializeField] private ShipInput _shipInput;
+        [SerializeField] private Viewport _viewport;
 
-        private ShipModel _shipModel;
-        private IBullet _bullet;
+
+        private ILoop _loop;
 
         private void Awake()
         {
@@ -22,18 +25,29 @@ namespace Game.Runtime.Application
                 Size = new Vector3(1, 1),
                 Center = Vector3.zero
             });
-            _shipModel = _factories.ShipFactory.Create(ShipType.Fast, _shipInput, shipCollider);
-            shipCollisions.Add(shipCollider, _shipModel);
+            var shipColliderCaster = new ColliderCaster<ShipModel>(shipCollisions);
+            var shipModel = _factories.ShipFactory.Create(ShipType.Fast, _shipInput, shipCollider);
+            shipCollisions.Add(shipCollider, shipModel);
 
-            _bullet =
-                _factories.BulletsFactory.Create(new Vector3(0, 10), new ColliderCaster<ShipModel>(shipCollisions));
-            _bullet.Shoot(Vector3.down);
+            var bullet =
+                _factories.BulletsFactory.Create(new Vector3(0, 10), shipColliderCaster);
+            bullet.Shoot(Vector3.down);
+
+            _loop = new GameObjectsLoop(new ILoop[]
+            {
+                _factories.BulletsFactory,
+                _factories.AsteroidFactory,
+                new AsteroidsSpawner(
+                    _factories.AsteroidFactory,
+                    shipColliderCaster,
+                    _viewport),
+                shipModel
+            });
         }
 
         private void Update()
         {
-            _shipModel.Execute(Time.deltaTime);
-            _bullet.Execute(Time.deltaTime);
+            _loop.Execute(Time.deltaTime);
         }
     }
 }

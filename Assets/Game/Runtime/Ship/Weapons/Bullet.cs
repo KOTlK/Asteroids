@@ -11,16 +11,16 @@ namespace Game.Runtime.Ship.Weapons
         private readonly ICollider _collider;
         private readonly IColliderCaster<ShipModel> _colliderCaster;
         private readonly IBulletView _view;
+        private readonly IObjectDestroyer<IBullet> _destroyer;
 
-        private bool _destroyed;
-
-        public Bullet(float damage, float speed, Vector3 startPosition, ICollider collider, IColliderCaster<ShipModel> colliderCaster, IBulletView view)
+        public Bullet(ICollider collider, IColliderCaster<ShipModel> colliderCaster, IBulletView view, IObjectDestroyer<IBullet> destroyer, float damage, float speed, Vector3 startPosition)
         {
             _damage = damage;
             _speed = speed;
             _collider = collider;
             _colliderCaster = colliderCaster;
             _view = view;
+            _destroyer = destroyer;
             _position = startPosition;
         }
 
@@ -29,10 +29,7 @@ namespace Game.Runtime.Ship.Weapons
 
         public void Execute(float deltaTime)
         {
-            if (_destroyed)
-                return;
-            
-            _position += _direction * _speed * deltaTime;
+            _position += _direction * (_speed * deltaTime);
 
             _collider.Position = _position;
             _view.Position = _position;
@@ -44,7 +41,8 @@ namespace Game.Runtime.Ship.Weapons
             {
                 castResult.Target.ApplyDamage(_damage);
                 _view.PlayHitAnimation();
-                _destroyed = true;
+                _view.DisposeOnAnimationEnd();
+                _destroyer.Destroy(this);
             }
         }
 

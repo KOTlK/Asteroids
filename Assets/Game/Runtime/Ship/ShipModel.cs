@@ -3,6 +3,7 @@ using Game.Runtime.GameLoop;
 using Game.Runtime.Input.Ship;
 using Game.Runtime.Physics;
 using Game.Runtime.Ship.Hp;
+using Game.Runtime.View.Viewport;
 using UnityEngine;
 
 namespace Game.Runtime.Ship
@@ -13,6 +14,7 @@ namespace Game.Runtime.Ship
         private readonly ICollider _collider;
         private readonly IHealth _health;
         private readonly ShipStats _stats;
+        private readonly IViewport _viewport;
         private readonly IShipInput _input;
         
         private Vector3 _velocity;
@@ -20,12 +22,13 @@ namespace Game.Runtime.Ship
 
         private const float MovementThreshold = 0.01f;
 
-        public ShipModel(ShipVisualization shipVisualization, ICollider collider, IHealth health, IShipInput input, ShipStats stats)
+        public ShipModel(ShipVisualization shipVisualization, ICollider collider, IHealth health, IShipInput input, ShipStats stats, IViewport viewport)
         {
             _shipVisualization = shipVisualization;
             _collider = collider;
             _health = health;
             _stats = stats;
+            _viewport = viewport;
             _input = input;
         }
 
@@ -52,7 +55,27 @@ namespace Game.Runtime.Ship
                     _velocity.y = 0;
             }
 
-            _position += _velocity * deltaTime;
+            var nextPosition = _position + _velocity * deltaTime;
+
+            var viewportPosition = _viewport.WorldToViewport(nextPosition);
+
+            if (viewportPosition.x <= -0.1f)
+            {
+                nextPosition.x = _viewport.ViewportToWorld(new Vector3(1.1f, 0, 0)).x;
+            }
+            else if (viewportPosition.x >= 1.1f)
+            {
+                nextPosition.x = _viewport.ViewportToWorld(new Vector3(-0.1f, 0, 0)).x;
+            }
+
+            if (viewportPosition.y is >= 0.95f or <= 0.05f)
+            {
+                nextPosition.y = _position.y;
+                _velocity.y = 0;
+            }
+
+
+            _position = nextPosition;    
             _collider.Position = _position;
             _shipVisualization.Position = _position;
             _shipVisualization.DrawUi(_velocity, _health);

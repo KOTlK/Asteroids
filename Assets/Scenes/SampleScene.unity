@@ -1241,6 +1241,7 @@ GameObject:
   - component: {fileID: 1485433364}
   - component: {fileID: 1485433363}
   - component: {fileID: 1485433365}
+  - component: {fileID: 1485433366}
   m_Layer: 0
   m_Name: Factories
   m_TagString: Untagged
@@ -1278,6 +1279,7 @@ MonoBehaviour:
       Damping: 19
       MaxHealth: 70
   _interface: {fileID: 1472639361}
+  _viewport: {fileID: 2137367747}
 --- !u!4 &1485433364
 Transform:
   m_ObjectHideFlags: 0
@@ -1308,6 +1310,31 @@ MonoBehaviour:
   _viewPrefab: {fileID: 2931843398500291289, guid: b641f49a50ea012469019b49f7c81664, type: 3}
   _bulletsDamage: 15
   _speed: 3
+--- !u!114 &1485433366
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1485433362}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e59ff3aeb43a4037b5ff1ac511dc0217, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _asteroidsViews:
+  - {fileID: 4584159331627705510, guid: e25f4aaf40840594dae250032d9fa02e, type: 3}
+  - {fileID: 3758890433498505257, guid: 8f571f98accac5d4e8d0f7b1e67d530b, type: 3}
+  - {fileID: 2337859963584153497, guid: f1d42133029fa224b95d764ce94826be, type: 3}
+  - {fileID: 1136528761857976103, guid: 15e2b07daf2aee4438767ab268e854ce, type: 3}
+  - {fileID: 2638880508469721049, guid: 6c972b26d03955b46ac8a664a4e1ace4, type: 3}
+  - {fileID: 7003305016049582411, guid: e862e784ce63f734b96565ac8f967e2e, type: 3}
+  - {fileID: 7180381393637499768, guid: 45fdc7f6f43396147b92b2309e5e6980, type: 3}
+  - {fileID: 8426462481270375630, guid: 9d073b1504c3f864ab4daeaba760f44c, type: 3}
+  - {fileID: 6154649516160470350, guid: 0c15c22dffcf3144eb9c1e337dc19774, type: 3}
+  - {fileID: 7942574827183077387, guid: e1eac4da1174f404f8643efe8efdc99e, type: 3}
+  _radius: 0.3
+  _viewport: {fileID: 2137367747}
 --- !u!1 &1628886338
 GameObject:
   m_ObjectHideFlags: 0
@@ -1384,7 +1411,9 @@ MonoBehaviour:
   _factories:
     ShipFactory: {fileID: 1485433363}
     BulletsFactory: {fileID: 1485433365}
+    AsteroidFactory: {fileID: 1485433366}
   _shipInput: {fileID: 1628886339}
+  _viewport: {fileID: 2137367747}
 --- !u!4 &1651081543
 Transform:
   m_ObjectHideFlags: 0
@@ -1399,6 +1428,7 @@ Transform:
   m_Children:
   - {fileID: 1485433364}
   - {fileID: 1628886340}
+  - {fileID: 2137367748}
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -1672,3 +1702,48 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1893782012}
   m_CullTransparentMesh: 1
+--- !u!1 &2137367746
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 2137367748}
+  - component: {fileID: 2137367747}
+  m_Layer: 0
+  m_Name: Viewport
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &2137367747
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2137367746}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6108d6a3dc374afb9a57bfec28c9d8e7, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _camera: {fileID: 519420031}
+--- !u!4 &2137367748
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2137367746}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 1651081543}
+  m_RootOrder: 2
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}

@@ -7,5 +7,6 @@ namespace Game.Runtime.Factories
     {
         public ShipFactory ShipFactory;
         public BulletsFactory BulletsFactory;
+        public AsteroidFactory AsteroidFactory;
     }
 }

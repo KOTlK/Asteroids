@@ -6,7 +6,9 @@ namespace Game.Runtime.Ship.Weapons
     {
         [SerializeField] private Animator _animator;
 
-        private int _explosionHash = Animator.StringToHash("Explosion");
+        private bool _disposeOnAnimationEnd = false;
+
+        private readonly int _explosionHash = Animator.StringToHash("Explosion");
         
         public Vector3 Position
         {
@@ -19,9 +21,25 @@ namespace Game.Runtime.Ship.Weapons
             _animator.Play(_explosionHash);
         }
 
+        public void DisposeOnAnimationEnd()
+        {
+            _disposeOnAnimationEnd = true;
+        }
+
         public void Dispose()
         {
+            if (_disposeOnAnimationEnd)
+                return;
+            
             Destroy(gameObject);
+        }
+
+        public void Destroy()
+        {
+            if (_disposeOnAnimationEnd)
+            {
+                Destroy(gameObject);
+            }
         }
     }
 }

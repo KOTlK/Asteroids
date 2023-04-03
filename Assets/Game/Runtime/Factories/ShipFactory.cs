@@ -5,6 +5,7 @@ using Game.Runtime.Physics;
 using Game.Runtime.Ship;
 using Game.Runtime.Ship.Hp;
 using Game.Runtime.View.Ship;
+using Game.Runtime.View.Viewport;
 using UnityEngine;
 
 namespace Game.Runtime.Factories
@@ -13,6 +14,7 @@ namespace Game.Runtime.Factories
     {
         [SerializeField] private ShipReference[] _shipReferences;
         [SerializeField] private ShipInterface _interface;
+        [SerializeField] private Viewport _viewport;
 
         public ShipModel Create(ShipType type, IShipInput input, ICollider collider)
         {
@@ -25,7 +27,8 @@ namespace Game.Runtime.Factories
                 collider,
                 new Health(reference.Stats.MaxHealth),
                 input,
-                reference.Stats);
+                reference.Stats,
+                _viewport);
         }
 
         public void Destroy(ShipModel model)
