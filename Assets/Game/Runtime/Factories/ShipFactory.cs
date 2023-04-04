@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Linq;
+using Game.Runtime.GameLoop;
 using Game.Runtime.Input.Ship;
 using Game.Runtime.Physics;
 using Game.Runtime.Ship;
@@ -11,13 +12,23 @@ using UnityEngine;
 
 namespace Game.Runtime.Factories
 {
-    public class ShipFactory : MonoBehaviour
+    public class ShipFactory : MonoBehaviour, IShipFactory
     {
         [SerializeField] private ShipReference[] _shipReferences;
         [SerializeField] private ShipInterface _interface;
         [SerializeField] private Viewport _viewport;
+        [SerializeField] private BulletsFactory _bulletsFactory;
 
-        public ShipModel Create(ShipType type, Vector3 position, IShipInput input, ICollidersWorld<IDamageable> collidersWorld)
+        private ICollidersWorld<IDamageable> _collidersWorld;
+
+        private readonly ExecutableObjectDestroyer<Ship.Ship> _destroyer = new();
+
+        public void Init(ICollidersWorld<IDamageable> collidersWorld)
+        {
+            _collidersWorld = collidersWorld;
+        }
+
+        public Ship.Ship Create(ShipType type, Vector3 position, IShipInput input)
         {
             var reference = _shipReferences.First(shipReference => shipReference.Type == type);
             var view = Instantiate(reference.View);
@@ -27,7 +38,7 @@ namespace Game.Runtime.Factories
                 Center = position,
             });
             
-            var model =  new ShipModel(
+            var model =  new Ship.Ship(
                 new ShipVisualization(
                     view,
                     _interface),
@@ -35,17 +46,26 @@ namespace Game.Runtime.Factories
                 new Health(reference.Stats.MaxHealth),
                 input,
                 reference.Stats,
-                _viewport);
+                _viewport,
+                new StandardWeapon(
+                    Vector3.up,
+                    _bulletsFactory,
+                    view,
+                    reference.WeaponStats));
 
-            collidersWorld.Add(collider, model);
+            _collidersWorld.Add(collider, model);
+            _destroyer.Add(model);
 
             return model;
         }
 
-        public void Destroy(ShipModel model)
+        public void Destroy(Ship.Ship model)
         {
-            model.Dispose();
+            _destroyer.Destroy(model);
+            _collidersWorld.Remove(model);
         }
+
+        public void Execute(float deltaTime) => _destroyer.Execute(deltaTime);
     }
 
     [Serializable]
@@ -58,5 +78,6 @@ namespace Game.Runtime.Factories
         public ShipType Type;
         public StandardShip View;
         public ShipStats Stats;
+        public WeaponStats WeaponStats;
     }
 }

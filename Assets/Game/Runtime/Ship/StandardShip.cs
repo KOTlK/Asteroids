@@ -17,7 +17,7 @@ namespace Game.Runtime.Ship
             set => transform.position = value;
         }
 
-        public Vector3 MainGunPivot => _gunPivot.position;
+        public Vector3 Pivot => _gunPivot.position;
         public void PlayExplosionAnimation()
         {
             _animator.Play(_explosionHash);

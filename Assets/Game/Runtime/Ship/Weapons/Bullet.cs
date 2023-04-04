@@ -13,6 +13,9 @@ namespace Game.Runtime.Ship.Weapons
         private readonly IBulletView _view;
         private readonly IObjectDestroyer<IBullet> _destroyer;
 
+        private float _lifeTime;
+        private const float MaxLifeTime = 15f;
+
         public Bullet(ICollider collider, IColliderCaster<IDamageable> colliderCaster, IBulletView view, IObjectDestroyer<IBullet> destroyer, float damage, float speed, Vector3 startPosition)
         {
             _damage = damage;
@@ -29,6 +32,14 @@ namespace Game.Runtime.Ship.Weapons
 
         public void Execute(float deltaTime)
         {
+            _lifeTime += deltaTime;
+
+            if (_lifeTime >= MaxLifeTime)
+            {
+                _destroyer.Destroy(this);
+                return;
+            }
+            
             _position += _direction * (_speed * deltaTime);
 
             _collider.Position = _position;
@@ -36,7 +47,6 @@ namespace Game.Runtime.Ship.Weapons
 
             var castResult = _colliderCaster.Cast(_collider);
 
-            
             if (castResult.Occure)
             {
                 castResult.Target.ApplyDamage(_damage);

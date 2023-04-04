@@ -2,12 +2,13 @@
 using Game.Runtime.Input.Ship;
 using Game.Runtime.Physics;
 using Game.Runtime.Ship.Hp;
+using Game.Runtime.Ship.Weapons;
 using Game.Runtime.View.Viewport;
 using UnityEngine;
 
 namespace Game.Runtime.Ship
 {
-    public class ShipModel : IShip
+    public class Ship : IShip
     {
         private readonly ShipVisualization _shipVisualization;
         private readonly ICollider _collider;
@@ -15,24 +16,28 @@ namespace Game.Runtime.Ship
         private readonly ShipStats _stats;
         private readonly IViewport _viewport;
         private readonly IShipInput _input;
+        private readonly IWeapon _weapon;
         
         private Vector3 _velocity;
         private Vector3 _position;
 
         private const float MovementThreshold = 0.01f;
 
-        public ShipModel(ShipVisualization shipVisualization, ICollider collider, IHealth health, IShipInput input, ShipStats stats, IViewport viewport)
+        public Ship(ShipVisualization shipVisualization, ICollider collider, IHealth health, IShipInput input, ShipStats stats, IViewport viewport, IWeapon weapon)
         {
             _shipVisualization = shipVisualization;
             _collider = collider;
             _health = health;
             _stats = stats;
             _viewport = viewport;
+            _weapon = weapon;
             _input = input;
         }
 
         public void Execute(float deltaTime)
         {
+            _weapon.Execute(deltaTime);
+            
             var input = _input.MovementDirection;
 
             _velocity.x = Mathf.Clamp(_velocity.x + _input.MovementDirection.x * deltaTime * _stats.Acceleration, -_stats.MaxSpeed, _stats.MaxSpeed);
@@ -71,6 +76,11 @@ namespace Game.Runtime.Ship
             {
                 nextPosition.y = _position.y;
                 _velocity.y = 0;
+            }
+
+            if (_input.ShootingMainGun && _weapon.CanShoot)
+            {
+                _weapon.Shoot();
             }
 
 

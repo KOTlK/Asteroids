@@ -14,11 +14,20 @@ namespace Game.Runtime.Factories
         [SerializeField] private BulletsFactory _bulletsFactory;
 
         private readonly ExecutableObjectDestroyer<EnemyShip> _destroyer = new();
+        
+        private ICollidersWorld<IDamageable> _collidersWorld;
+        private IColliderCaster<IDamageable> _targetColliders;
+
+        public void Init(ICollidersWorld<IDamageable> collidersWorld, IColliderCaster<IDamageable> targets)
+        {
+            _collidersWorld = collidersWorld;
+            _targetColliders = targets;
+        }
 
         //temp
         private readonly List<EnemyShipInput> _inputs = new();
 
-        public EnemyShip Create(Vector3 position, ICollidersWorld<IDamageable> collidersWorld, IColliderCaster<IDamageable> colliderCaster)
+        public EnemyShip Create(Vector3 position)
         {
             var view = Instantiate(_prefabs[Random.Range(0, _prefabs.Length)], position, Quaternion.Euler(0, 0, 180));
             var collider = new AABBCollider(new AABB()
@@ -34,17 +43,21 @@ namespace Game.Runtime.Factories
                 _bulletsFactory,
                 collider,
                 input,
-                colliderCaster,
+                _targetColliders,
                 view.Stats);
 
             _inputs.Add(input);
-            collidersWorld.Add(collider, model);
+            _collidersWorld.Add(collider, model);
             _destroyer.Add(model);
             
             return model;
         }
 
-        public void Destroy(EnemyShip obj) => _destroyer.Destroy(obj);
+        public void Destroy(EnemyShip obj)
+        {
+            _collidersWorld.Remove(obj);
+            _destroyer.Destroy(obj);
+        }
 
         public void Execute(float deltaTime)
         {

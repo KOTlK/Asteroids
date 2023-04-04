@@ -22,7 +22,7 @@ namespace Game.Runtime.Ship
             set => _view.Position = value;
         }
 
-        public Vector3 MainGunPivot => _view.MainGunPivot;
+        public Vector3 Pivot => _view.Pivot;
         public void PlayExplosionAnimation() => _view.PlayExplosionAnimation();
 
         public void DrawUi(Vector3 velocity, IHealth health)

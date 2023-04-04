@@ -19,21 +19,29 @@ namespace Game.Runtime.Application
 
         private void Awake()
         {
-            var shipCollisions = new CollidersWorld<IDamageable>();
-            var shipColliderCaster = new ColliderCaster<IDamageable>(shipCollisions);
-            var enemiesCollisionsWorld = new CollidersWorld<IDamageable>();
+            var bulletsCollidersWorld = new CollidersWorld<IBullet>();
+            var shipCollidersWorld = new CollidersWorld<IDamageable>();
+            var shipColliderCaster = new ColliderCaster<IDamageable>(shipCollidersWorld);
+            var enemiesCollidersWorld = new CollidersWorld<IDamageable>();
+            var enemiesColliderCaster = new ColliderCaster<IDamageable>(enemiesCollidersWorld);
+            
+            _factories.EnemyBulletsFactory.Init(bulletsCollidersWorld, shipColliderCaster);
+            _factories.PlayerBulletsFactory.Init(bulletsCollidersWorld, enemiesColliderCaster);
+            _factories.AsteroidFactory.Init(shipColliderCaster, enemiesCollidersWorld);
+            _factories.EnemiesFactory.Init(enemiesCollidersWorld, shipColliderCaster);
+            _factories.ShipFactory.Init(shipCollidersWorld);
 
-            var shipModel = _factories.ShipFactory.Create(ShipType.Fast, Vector3.zero, _shipInput, shipCollisions);
-            _factories.EnemiesFactory.Create(new Vector3(0, 10), enemiesCollisionsWorld, shipColliderCaster);
+            var shipModel = _factories.ShipFactory.Create(ShipType.Fast, Vector3.zero, _shipInput);
+            _factories.EnemiesFactory.Create(new Vector3(0, 10));
 
             _loop = new GameObjectsLoop(new ILoop[]
             {
                 _factories.EnemiesFactory,
-                _factories.BulletsFactory,
+                _factories.EnemyBulletsFactory,
+                _factories.PlayerBulletsFactory,
                 _factories.AsteroidFactory,
                 new AsteroidsSpawner(
                     _factories.AsteroidFactory,
-                    shipColliderCaster,
                     _viewport),
                 shipModel
             });

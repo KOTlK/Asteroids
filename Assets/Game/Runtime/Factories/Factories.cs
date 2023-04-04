@@ -6,7 +6,8 @@ namespace Game.Runtime.Factories
     public class Factories
     {
         public ShipFactory ShipFactory;
-        public BulletsFactory BulletsFactory;
+        public BulletsFactory EnemyBulletsFactory;
+        public BulletsFactory PlayerBulletsFactory;
         public AsteroidFactory AsteroidFactory;
         public EnemiesFactory EnemiesFactory;
     }

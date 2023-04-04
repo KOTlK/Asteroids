@@ -1,5 +1,6 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace Game.Runtime.Physics
 {
@@ -16,6 +17,12 @@ namespace Game.Runtime.Physics
 
         public void Remove(ICollider collider)
         {
+            _collidersMap.Remove(collider);
+        }
+
+        public void Remove(T obj)
+        {
+            var collider = _collidersMap.First(pair => pair.Value.Equals(obj)).Key;
             _collidersMap.Remove(collider);
         }
 

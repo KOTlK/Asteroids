@@ -7,7 +7,7 @@ using UnityEngine;
 
 namespace Game.Runtime.Enemies
 {
-    public class Asteroid : ILoop, IDisposable
+    public class Asteroid : ILoop, IDisposable, IDamageable
     {
         private readonly IAsteroidView _view;
         private readonly IObjectDestroyer<Asteroid> _destroyer;
@@ -58,6 +58,13 @@ namespace Game.Runtime.Enemies
         public void Dispose()
         {
             _view.Dispose();
+        }
+
+        public void ApplyDamage(float amount)
+        {
+            _view.PlayExplosionAnimation();
+            _view.DisposeOnAnimationEnd();
+            _destroyer.Destroy(this);
         }
     }
 }

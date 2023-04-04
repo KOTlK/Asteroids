@@ -55,7 +55,7 @@ namespace Game.Runtime.Enemies
 
             if (_input.ShootingMainGun)
             {
-                var bullet = _bulletsFactory.Create(_shipVisualization.MainGunPivot, _colliderCaster, _stats.Damage, _stats.BulletsSpeed);
+                var bullet = _bulletsFactory.Create(_shipVisualization.Pivot, _stats.Damage, _stats.BulletsSpeed);
                 bullet.Shoot(Vector3.down);
             }
         }

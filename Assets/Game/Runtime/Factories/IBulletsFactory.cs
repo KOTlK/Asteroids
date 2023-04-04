@@ -7,6 +7,6 @@ namespace Game.Runtime.Factories
 {
     public interface IBulletsFactory : IObjectDestroyer<IBullet>, ILoop
     {
-        IBullet Create(Vector3 startPosition, IColliderCaster<IDamageable> colliderCaster, float damage, float speed);
+        IBullet Create(Vector3 startPosition, float damage, float speed);
     }
 }

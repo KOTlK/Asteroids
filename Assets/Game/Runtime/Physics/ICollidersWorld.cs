@@ -7,5 +7,6 @@ namespace Game.Runtime.Physics
         TTarget this[ICollider collider] { get; }
         void Add(ICollider collider, TTarget target);
         void Remove(ICollider collider);
+        void Remove(TTarget obj);
     }
 }
