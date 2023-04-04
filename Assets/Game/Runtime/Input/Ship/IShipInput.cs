@@ -5,8 +5,7 @@ namespace Game.Runtime.Input.Ship
 {
     public interface IShipInput
     {
-        event Action MachineGunShoot;
-        event Action LaserShoot;
+        bool ShootingMainGun { get; }
         Vector2 MovementDirection { get; }
     }
 }

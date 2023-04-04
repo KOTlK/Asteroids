@@ -1,7 +1,7 @@
 ﻿using System;
 using Game.Runtime.GameLoop;
 using Game.Runtime.Physics;
-using Game.Runtime.Ship;
+using Game.Runtime.Ship.Weapons;
 using Game.Runtime.View.Viewport;
 using UnityEngine;
 
@@ -12,14 +12,14 @@ namespace Game.Runtime.Enemies
         private readonly IAsteroidView _view;
         private readonly IObjectDestroyer<Asteroid> _destroyer;
         private readonly ICollider _collider;
-        private readonly IColliderCaster<ShipModel> _colliderCaster;
+        private readonly IColliderCaster<IDamageable> _colliderCaster;
         private readonly IViewport _viewport;
         private readonly float _speed;
         private readonly float _damage;
 
         private Vector3 _position;
 
-        public Asteroid(IAsteroidView view, IViewport viewport, IObjectDestroyer<Asteroid> destroyer, ICollider collider, IColliderCaster<ShipModel> colliderCaster, float speed, float damage)
+        public Asteroid(IAsteroidView view, IViewport viewport, IObjectDestroyer<Asteroid> destroyer, ICollider collider, IColliderCaster<IDamageable> colliderCaster, float speed, float damage)
         {
             _view = view;
             _viewport = viewport;
@@ -49,7 +49,7 @@ namespace Game.Runtime.Enemies
             }
 
             var viewportPosition = _viewport.WorldToViewport(_position);
-            if (viewportPosition.y < -2)
+            if (viewportPosition.y < -1.5f)
             {
                 _destroyer.Destroy(this);
             }

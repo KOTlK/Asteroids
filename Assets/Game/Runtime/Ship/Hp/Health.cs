@@ -17,6 +17,8 @@ namespace Game.Runtime.Ship.Hp
             _current = max;
         }
 
+        public bool IsOver => _current <= Min;
+
         public void Lose(float amount)
         {
             SetCurrent(_current - amount);
@@ -34,7 +36,7 @@ namespace Game.Runtime.Ship.Hp
 
         public void Visualize(IHealthView view)
         {
-            view.Display(_current);
+            view.DisplayHealth(_current);
         }
     }
 }

@@ -9,11 +9,11 @@ namespace Game.Runtime.Ship.Weapons
         private readonly float _damage;
         private readonly float _speed;
         private readonly ICollider _collider;
-        private readonly IColliderCaster<ShipModel> _colliderCaster;
+        private readonly IColliderCaster<IDamageable> _colliderCaster;
         private readonly IBulletView _view;
         private readonly IObjectDestroyer<IBullet> _destroyer;
 
-        public Bullet(ICollider collider, IColliderCaster<ShipModel> colliderCaster, IBulletView view, IObjectDestroyer<IBullet> destroyer, float damage, float speed, Vector3 startPosition)
+        public Bullet(ICollider collider, IColliderCaster<IDamageable> colliderCaster, IBulletView view, IObjectDestroyer<IBullet> destroyer, float damage, float speed, Vector3 startPosition)
         {
             _damage = damage;
             _speed = speed;

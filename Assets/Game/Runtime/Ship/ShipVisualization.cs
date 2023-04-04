@@ -5,7 +5,7 @@ using UnityEngine;
 
 namespace Game.Runtime.Ship
 {
-    public class ShipVisualization : IDisposable
+    public class ShipVisualization : IShipView, IShipInterface
     {
         private readonly IShipView _view;
         private readonly IShipInterface _shipInterface;
@@ -22,6 +22,9 @@ namespace Game.Runtime.Ship
             set => _view.Position = value;
         }
 
+        public Vector3 MainGunPivot => _view.MainGunPivot;
+        public void PlayExplosionAnimation() => _view.PlayExplosionAnimation();
+
         public void DrawUi(Vector3 velocity, IHealth health)
         {
             _shipInterface.DisplayPosition(_view.Position);
@@ -33,5 +36,12 @@ namespace Game.Runtime.Ship
         {
             _view.Dispose();
         }
+
+        public void DisposeOnAnimationEnd() => _view.DisposeOnAnimationEnd();
+        public void DisplayHealth(float amount) => _shipInterface.DisplayHealth(amount);
+
+        public void DisplayVelocity(Vector3 velocity) => _shipInterface.DisplayVelocity(velocity);
+
+        public void DisplayPosition(Vector3 position) => _shipInterface.DisplayPosition(position);
     }
 }

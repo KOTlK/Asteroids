@@ -1,11 +1,13 @@
 ﻿using System;
-using Game.Runtime.Physics;
+using Game.Runtime.View;
 using UnityEngine;
 
 namespace Game.Runtime.Ship
 {
-    public interface IShipView : IDisposable
+    public interface IShipView : IDisposable, IAnimationEndDisposable
     {
         Vector3 Position { get; set; }
+        Vector3 MainGunPivot { get; }
+        void PlayExplosionAnimation();
     }
 }

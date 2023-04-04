@@ -1,7 +1,7 @@
 ﻿using Game.Runtime.Factories;
 using Game.Runtime.GameLoop;
 using Game.Runtime.Physics;
-using Game.Runtime.Ship;
+using Game.Runtime.Ship.Weapons;
 using Game.Runtime.View.Viewport;
 using UnityEngine;
 using Random = System.Random;
@@ -11,14 +11,14 @@ namespace Game.Runtime.Enemies
     public class AsteroidsSpawner : ILoop
     {
         private readonly IAsteroidsFactory _factory;
-        private readonly IColliderCaster<ShipModel> _colliderCaster;
+        private readonly IColliderCaster<IDamageable> _colliderCaster;
         private readonly IViewport _viewport;
         private readonly Random _random;
 
         private float _timePassed;
         private float _delay;
 
-        public AsteroidsSpawner(IAsteroidsFactory factory, IColliderCaster<ShipModel> colliderCaster, IViewport viewport)
+        public AsteroidsSpawner(IAsteroidsFactory factory, IColliderCaster<IDamageable> colliderCaster, IViewport viewport)
         {
             _random = new Random();
             _factory = factory;

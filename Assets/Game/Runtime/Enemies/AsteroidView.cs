@@ -31,7 +31,6 @@ namespace Game.Runtime.Enemies
             if (_disposeOnAnimationEnd == false)
             {
                 Destroy();
-                Debug.Log("Destroyed");
             }
         }
 

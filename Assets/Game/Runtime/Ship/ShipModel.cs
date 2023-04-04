@@ -1,5 +1,4 @@
 ﻿using System;
-using Game.Runtime.GameLoop;
 using Game.Runtime.Input.Ship;
 using Game.Runtime.Physics;
 using Game.Runtime.Ship.Hp;
@@ -8,7 +7,7 @@ using UnityEngine;
 
 namespace Game.Runtime.Ship
 {
-    public class ShipModel : ILoop, IDisposable
+    public class ShipModel : IShip
     {
         private readonly ShipVisualization _shipVisualization;
         private readonly ICollider _collider;

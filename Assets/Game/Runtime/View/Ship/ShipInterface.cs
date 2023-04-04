@@ -19,7 +19,7 @@ namespace Game.Runtime.View.Ship
             _position.text = $"{position}";
         }
 
-        public void Display(float amount)
+        public void DisplayHealth(float amount)
         {
             _health.text = amount.ToString();
         }

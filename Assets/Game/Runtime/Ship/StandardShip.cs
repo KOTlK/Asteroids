@@ -1,13 +1,15 @@
-﻿using System;
-using Game.Runtime.Physics;
-using UnityEngine;
+﻿using UnityEngine;
 
 namespace Game.Runtime.Ship
 {
-    [RequireComponent(typeof(Rigidbody2D))]
     public class StandardShip : MonoBehaviour, IShipView
     {
-        public Type Origin => typeof(ShipModel);
+        [SerializeField] private Transform _gunPivot;
+        [SerializeField] private Animator _animator;
+
+        private readonly int _explosionHash = Animator.StringToHash("Explosion");
+
+        private bool _destroyOnAnimationEnd = false;
 
         public Vector3 Position
         {
@@ -15,14 +17,31 @@ namespace Game.Runtime.Ship
             set => transform.position = value;
         }
 
+        public Vector3 MainGunPivot => _gunPivot.position;
+        public void PlayExplosionAnimation()
+        {
+            _animator.Play(_explosionHash);
+        }
+
         public void Dispose()
         {
-            Destroy(gameObject);
+            if (_destroyOnAnimationEnd == false)
+            {
+                Destroy(gameObject);
+            }
         }
 
-        private void OnTriggerEnter2D(Collider2D col)
+        public virtual void DisposeOnAnimationEnd()
         {
+            _destroyOnAnimationEnd = true;
         }
 
+        public void Destroy()
+        {
+            if (_destroyOnAnimationEnd)
+            {
+                Destroy(gameObject);
+            }
+        }
     }
 }

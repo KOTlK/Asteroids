@@ -1242,6 +1242,7 @@ GameObject:
   - component: {fileID: 1485433363}
   - component: {fileID: 1485433365}
   - component: {fileID: 1485433366}
+  - component: {fileID: 1485433367}
   m_Layer: 0
   m_Name: Factories
   m_TagString: Untagged
@@ -1264,7 +1265,7 @@ MonoBehaviour:
   _shipReferences:
   - Name: Default
     Type: 1
-    View: {fileID: 8019388792544331216, guid: d6aef048296de6f42ace7002778b128b, type: 3}
+    View: {fileID: -6275709633913316943, guid: d6aef048296de6f42ace7002778b128b, type: 3}
     Stats:
       MaxSpeed: 5
       Acceleration: 15
@@ -1272,7 +1273,7 @@ MonoBehaviour:
       MaxHealth: 100
   - Name: Fast
     Type: 2
-    View: {fileID: 1668021469846446078, guid: a2e1e75f09c57c849be233a7c34596e1, type: 3}
+    View: {fileID: 5801943058378326943, guid: a2e1e75f09c57c849be233a7c34596e1, type: 3}
     Stats:
       MaxSpeed: 7
       Acceleration: 19
@@ -1308,8 +1309,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _viewPrefab: {fileID: 2931843398500291289, guid: b641f49a50ea012469019b49f7c81664, type: 3}
-  _bulletsDamage: 15
-  _speed: 3
 --- !u!114 &1485433366
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1335,6 +1334,21 @@ MonoBehaviour:
   - {fileID: 7942574827183077387, guid: e1eac4da1174f404f8643efe8efdc99e, type: 3}
   _radius: 0.3
   _viewport: {fileID: 2137367747}
+--- !u!114 &1485433367
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1485433362}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 519e1cfb6972401488e301c5bdeca225, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _prefabs:
+  - {fileID: 6279061692907111727, guid: b12601b30426d2348aa444af73fadc8b, type: 3}
+  _bulletsFactory: {fileID: 1485433365}
 --- !u!1 &1628886338
 GameObject:
   m_ObjectHideFlags: 0
@@ -1412,6 +1426,7 @@ MonoBehaviour:
     ShipFactory: {fileID: 1485433363}
     BulletsFactory: {fileID: 1485433365}
     AsteroidFactory: {fileID: 1485433366}
+    EnemiesFactory: {fileID: 1485433367}
   _shipInput: {fileID: 1628886339}
   _viewport: {fileID: 2137367747}
 --- !u!4 &1651081543
