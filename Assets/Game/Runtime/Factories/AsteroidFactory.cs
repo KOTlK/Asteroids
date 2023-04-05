@@ -1,4 +1,5 @@
 ﻿using Game.Runtime.Enemies;
+using Game.Runtime.Factories.View;
 using Game.Runtime.Physics;
 using Game.Runtime.Ship.Weapons;
 using Game.Runtime.View.Viewport;
@@ -6,31 +7,31 @@ using UnityEngine;
 
 namespace Game.Runtime.Factories
 {
-    public class AsteroidFactory : MonoBehaviour, IAsteroidsFactory
+    public class AsteroidFactory : IAsteroidsFactory
     {
-        [SerializeField] private AsteroidView[] _asteroidsViews;
-        [SerializeField] private float _radius;
-        [SerializeField] private Viewport _viewport;
+        private readonly ExecutableObjectDestructor<Asteroid> _destructor = new();
+        private readonly IViewport _viewport;
+        private readonly IColliderCaster<IDamageable> _targetColliders;
+        private readonly ICollidersWorld<IDamageable> _asteroidsWorld;
+        private readonly IAsteroidViewFactory _asteroidViewFactory;
 
-        private readonly ExecutableObjectDestroyer<Asteroid> _destroyer = new();
+        private const float Radius = 0.3f;
 
-        private IColliderCaster<IDamageable> _targetColliders;
-        private ICollidersWorld<IDamageable> _asteroidsWorld;
-
-        public void Init(IColliderCaster<IDamageable> targetColliders, ICollidersWorld<IDamageable> world)
+        public AsteroidFactory(IViewport viewport, IColliderCaster<IDamageable> targetColliders, ICollidersWorld<IDamageable> asteroidsWorld, IAsteroidViewFactory asteroidViewFactory)
         {
+            _viewport = viewport;
             _targetColliders = targetColliders;
-            _asteroidsWorld = world;
+            _asteroidsWorld = asteroidsWorld;
+            _asteroidViewFactory = asteroidViewFactory;
         }
 
         public Asteroid Create(float speed, float damage, Vector3 startPosition)
         {
-            var random = Random.Range(0, _asteroidsViews.Length - 1);
-            var view = Instantiate(_asteroidsViews[random], startPosition, Quaternion.identity);
+            var view = _asteroidViewFactory.Create(startPosition);
             var collider = new CircleCollider(new Circle()
             {
                 Center = startPosition,
-                Radius = _radius
+                Radius = Radius
             });
             var asteroid = new Asteroid(view,
                 _viewport,
@@ -40,7 +41,7 @@ namespace Game.Runtime.Factories
                 speed,
                 damage);
 
-            _destroyer.Add(asteroid);
+            _destructor.Add(asteroid);
             _asteroidsWorld.Add(collider, asteroid);
             
             return asteroid;
@@ -49,9 +50,9 @@ namespace Game.Runtime.Factories
         public void Destroy(Asteroid obj)
         {
             _asteroidsWorld.Remove(obj);
-            _destroyer.Destroy(obj);
+            _destructor.Destroy(obj);
         }
 
-        public void Execute(float deltaTime) => _destroyer.Execute(deltaTime);
+        public void Execute(float deltaTime) => _destructor.Execute(deltaTime);
     }
 }

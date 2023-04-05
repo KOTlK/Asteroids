@@ -1,6 +1,6 @@
 ﻿namespace Game.Runtime.GameLoop
 {
-    public interface IObjectDestroyer<in TObject>
+    public interface IObjectDestructor<in TObject>
     {
         public void Destroy(TObject obj);
     }

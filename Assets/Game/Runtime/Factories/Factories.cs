@@ -1,14 +1,15 @@
 ﻿using System;
+using Game.Runtime.Factories.View;
 
 namespace Game.Runtime.Factories
 {
     [Serializable]
     public class Factories
     {
-        public ShipFactory ShipFactory;
-        public BulletsFactory EnemyBulletsFactory;
-        public BulletsFactory PlayerBulletsFactory;
-        public AsteroidFactory AsteroidFactory;
-        public EnemiesFactory EnemiesFactory;
+        public PlayerShipViewFactory PlayerShipViewFactory;
+        public BulletViewFactory EnemyBulletsViewFactory;
+        public BulletViewFactory PlayerBulletsViewFactory;
+        public AsteroidViewFactory AsteroidViewFactory;
+        public EnemyShipViewFactory EnemyShipViewFactory;
     }
 }

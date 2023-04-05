@@ -11,19 +11,19 @@ namespace Game.Runtime.Ship.Weapons
         private readonly ICollider _collider;
         private readonly IColliderCaster<IDamageable> _colliderCaster;
         private readonly IBulletView _view;
-        private readonly IObjectDestroyer<IBullet> _destroyer;
+        private readonly IObjectDestructor<IBullet> _destructor;
 
         private float _lifeTime;
         private const float MaxLifeTime = 15f;
 
-        public Bullet(ICollider collider, IColliderCaster<IDamageable> colliderCaster, IBulletView view, IObjectDestroyer<IBullet> destroyer, float damage, float speed, Vector3 startPosition)
+        public Bullet(ICollider collider, IColliderCaster<IDamageable> colliderCaster, IBulletView view, IObjectDestructor<IBullet> destructor, float damage, float speed, Vector3 startPosition)
         {
             _damage = damage;
             _speed = speed;
             _collider = collider;
             _colliderCaster = colliderCaster;
             _view = view;
-            _destroyer = destroyer;
+            _destructor = destructor;
             _position = startPosition;
         }
 
@@ -36,7 +36,7 @@ namespace Game.Runtime.Ship.Weapons
 
             if (_lifeTime >= MaxLifeTime)
             {
-                _destroyer.Destroy(this);
+                _destructor.Destroy(this);
                 return;
             }
             
@@ -52,7 +52,7 @@ namespace Game.Runtime.Ship.Weapons
                 castResult.Target.ApplyDamage(_damage);
                 _view.PlayHitAnimation();
                 _view.DisposeOnAnimationEnd();
-                _destroyer.Destroy(this);
+                _destructor.Destroy(this);
             }
         }
 

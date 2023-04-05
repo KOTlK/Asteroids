@@ -12,7 +12,7 @@ namespace Game.Runtime.Enemies
     public class EnemyShip : IShip
     {
         private readonly IShipView _shipVisualization;
-        private readonly IObjectDestroyer<EnemyShip> _destroyer;
+        private readonly IObjectDestructor<EnemyShip> _destructor;
         private readonly IBulletsFactory _bulletsFactory;
         private readonly ICollider _collider;
         private readonly IShipInput _input;
@@ -22,11 +22,11 @@ namespace Game.Runtime.Enemies
 
         private Vector3 _position;
 
-        public EnemyShip(Vector3 startPosition, IShipView shipVisualization, IObjectDestroyer<EnemyShip> destroyer, IBulletsFactory bulletsFactory, ICollider collider, IShipInput input, IColliderCaster<IDamageable> colliderCaster, EnemyShipStats stats)
+        public EnemyShip(Vector3 startPosition, IShipView shipVisualization, IObjectDestructor<EnemyShip> destructor, IBulletsFactory bulletsFactory, ICollider collider, IShipInput input, IColliderCaster<IDamageable> colliderCaster, EnemyShipStats stats)
         {
             _position = startPosition;
             _shipVisualization = shipVisualization;
-            _destroyer = destroyer;
+            _destructor = destructor;
             _bulletsFactory = bulletsFactory;
             _collider = collider;
             _input = input;
@@ -49,7 +49,7 @@ namespace Game.Runtime.Enemies
                 raycastHit.Target.ApplyDamage(_stats.DamageOnCollision);
                 _shipVisualization.PlayExplosionAnimation();
                 _shipVisualization.DisposeOnAnimationEnd();
-                _destroyer.Destroy(this);
+                _destructor.Destroy(this);
                 return;
             }
 
@@ -72,7 +72,7 @@ namespace Game.Runtime.Enemies
             {
                 _shipVisualization.PlayExplosionAnimation();
                 _shipVisualization.DisposeOnAnimationEnd();
-                _destroyer.Destroy(this);
+                _destructor.Destroy(this);
             }
         }
 

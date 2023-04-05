@@ -5,7 +5,7 @@ using UnityEngine;
 
 namespace Game.Runtime.Factories
 {
-    public interface IBulletsFactory : IObjectDestroyer<IBullet>, ILoop
+    public interface IBulletsFactory : IObjectDestructor<IBullet>, ILoop
     {
         IBullet Create(Vector3 startPosition, float damage, float speed);
     }

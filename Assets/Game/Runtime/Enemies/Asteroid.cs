@@ -10,7 +10,7 @@ namespace Game.Runtime.Enemies
     public class Asteroid : ILoop, IDisposable, IDamageable
     {
         private readonly IAsteroidView _view;
-        private readonly IObjectDestroyer<Asteroid> _destroyer;
+        private readonly IObjectDestructor<Asteroid> _destructor;
         private readonly ICollider _collider;
         private readonly IColliderCaster<IDamageable> _colliderCaster;
         private readonly IViewport _viewport;
@@ -19,11 +19,11 @@ namespace Game.Runtime.Enemies
 
         private Vector3 _position;
 
-        public Asteroid(IAsteroidView view, IViewport viewport, IObjectDestroyer<Asteroid> destroyer, ICollider collider, IColliderCaster<IDamageable> colliderCaster, float speed, float damage)
+        public Asteroid(IAsteroidView view, IViewport viewport, IObjectDestructor<Asteroid> destructor, ICollider collider, IColliderCaster<IDamageable> colliderCaster, float speed, float damage)
         {
             _view = view;
             _viewport = viewport;
-            _destroyer = destroyer;
+            _destructor = destructor;
             _collider = collider;
             _colliderCaster = colliderCaster;
             _speed = speed;
@@ -45,13 +45,13 @@ namespace Game.Runtime.Enemies
                 castHit.Target.ApplyDamage(_damage);
                 _view.PlayExplosionAnimation();
                 _view.DisposeOnAnimationEnd();
-                _destroyer.Destroy(this);
+                _destructor.Destroy(this);
             }
 
             var viewportPosition = _viewport.WorldToViewport(_position);
             if (viewportPosition.y < -1.5f)
             {
-                _destroyer.Destroy(this);
+                _destructor.Destroy(this);
             }
         }
 
@@ -64,7 +64,7 @@ namespace Game.Runtime.Enemies
         {
             _view.PlayExplosionAnimation();
             _view.DisposeOnAnimationEnd();
-            _destroyer.Destroy(this);
+            _destructor.Destroy(this);
         }
     }
 }

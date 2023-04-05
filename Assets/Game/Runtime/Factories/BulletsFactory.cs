@@ -1,26 +1,25 @@
-﻿using Game.Runtime.Physics;
+﻿using Game.Runtime.Factories.View;
+using Game.Runtime.Physics;
 using Game.Runtime.Ship.Weapons;
 using UnityEngine;
 
 namespace Game.Runtime.Factories
 {
-    //Didn't wanna make view factories, so it's MonoBehaviour
-    public class BulletsFactory : MonoBehaviour, IBulletsFactory
+    public class BulletsFactory : IBulletsFactory
     {
-        [SerializeField] private BulletView _viewPrefab;
+        private readonly ICollidersWorld<IBullet> _collidersWorld;
+        private readonly IColliderCaster<IDamageable> _targetColliders;
+        private readonly IBulletViewFactory _bulletViewFactory;
+        private readonly ExecutableObjectDestructor<IBullet> _destructor = new();
 
-        private readonly ExecutableObjectDestroyer<IBullet> _destroyer = new();
-
-        private ICollidersWorld<IBullet> _collidersWorld;
-        private IColliderCaster<IDamageable> _targetColliders;
-
-        public void Init(ICollidersWorld<IBullet> collidersWorld, IColliderCaster<IDamageable> targetColliders)
+        public BulletsFactory(ICollidersWorld<IBullet> collidersWorld, IColliderCaster<IDamageable> targetColliders, IBulletViewFactory bulletViewFactory)
         {
             _collidersWorld = collidersWorld;
             _targetColliders = targetColliders;
+            _bulletViewFactory = bulletViewFactory;
         }
 
-        public IBullet Create(Vector3 startPosition,  float damage, float speed)
+        public IBullet Create(Vector3 startPosition, float damage, float speed)
         {
             var collider = new CircleCollider(new Circle()
             {
@@ -28,9 +27,9 @@ namespace Game.Runtime.Factories
                 Center = startPosition
             });
 
-            var view = Instantiate(_viewPrefab, startPosition, Quaternion.identity);
+            var view = _bulletViewFactory.Create(startPosition);
             var bullet = new Bullet(collider, _targetColliders, view, this, damage, speed, startPosition);
-            _destroyer.Add(bullet);
+            _destructor.Add(bullet);
             _collidersWorld.Add(collider, bullet);
             return bullet;
         }
@@ -38,9 +37,9 @@ namespace Game.Runtime.Factories
         public void Destroy(IBullet obj)
         {
             _collidersWorld.Remove(obj);
-            _destroyer.Destroy(obj);
+            _destructor.Destroy(obj);
         }
 
-        public void Execute(float deltaTime) => _destroyer.Execute(deltaTime);
+        public void Execute(float deltaTime) => _destructor.Execute(deltaTime);
     }
 }

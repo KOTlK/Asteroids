@@ -807,7 +807,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 823375036}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 3802c3478e584e57814733ec1a8896c3, type: 3}
+  m_Script: {fileID: 11500000, guid: 6d6121cc56274eb78f1ec1b0b092742e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   _viewPrefab: {fileID: 2931843398500291289, guid: b641f49a50ea012469019b49f7c81664, type: 3}
@@ -1261,7 +1261,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 1248895609}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 3802c3478e584e57814733ec1a8896c3, type: 3}
+  m_Script: {fileID: 11500000, guid: 6d6121cc56274eb78f1ec1b0b092742e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   _viewPrefab: {fileID: 2428399066137955342, guid: 24d9543f1efcfb84b98d60fa57f4b176, type: 3}
@@ -1329,9 +1329,9 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1485433364}
-  - component: {fileID: 1485433363}
-  - component: {fileID: 1485433366}
   - component: {fileID: 1485433367}
+  - component: {fileID: 1485433366}
+  - component: {fileID: 1485433365}
   m_Layer: 0
   m_Name: Factories
   m_TagString: Untagged
@@ -1339,46 +1339,6 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!114 &1485433363
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1485433362}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 2a84571eb43e4b4ebcda282073448af4, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  _shipReferences:
-  - Name: Default
-    Type: 1
-    View: {fileID: -6275709633913316943, guid: d6aef048296de6f42ace7002778b128b, type: 3}
-    Stats:
-      MaxSpeed: 5
-      Acceleration: 15
-      Damping: 9
-      MaxHealth: 100
-    WeaponStats:
-      Damage: 25
-      BulletsSpeed: 7
-      ReloadTime: 1
-  - Name: Fast
-    Type: 2
-    View: {fileID: 5801943058378326943, guid: a2e1e75f09c57c849be233a7c34596e1, type: 3}
-    Stats:
-      MaxSpeed: 7
-      Acceleration: 19
-      Damping: 19
-      MaxHealth: 70
-    WeaponStats:
-      Damage: 15
-      BulletsSpeed: 8
-      ReloadTime: 0.6
-  _interface: {fileID: 1472639361}
-  _viewport: {fileID: 2137367747}
-  _bulletsFactory: {fileID: 823375038}
 --- !u!4 &1485433364
 Transform:
   m_ObjectHideFlags: 0
@@ -1396,7 +1356,7 @@ Transform:
   m_Father: {fileID: 1651081543}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &1485433366
+--- !u!114 &1485433365
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -1405,7 +1365,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 1485433362}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: e59ff3aeb43a4037b5ff1ac511dc0217, type: 3}
+  m_Script: {fileID: 11500000, guid: c0ebfaf1f6ab4cc682ef1c9195ab10a1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   _asteroidsViews:
@@ -1419,8 +1379,20 @@ MonoBehaviour:
   - {fileID: 8426462481270375630, guid: 9d073b1504c3f864ab4daeaba760f44c, type: 3}
   - {fileID: 6154649516160470350, guid: 0c15c22dffcf3144eb9c1e337dc19774, type: 3}
   - {fileID: 7942574827183077387, guid: e1eac4da1174f404f8643efe8efdc99e, type: 3}
-  _radius: 0.3
-  _viewport: {fileID: 2137367747}
+--- !u!114 &1485433366
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1485433362}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6abac4b8f0f747e9b47a06bd8dc40671, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _prefabs:
+  - {fileID: 6279061692907111727, guid: b12601b30426d2348aa444af73fadc8b, type: 3}
 --- !u!114 &1485433367
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1430,12 +1402,16 @@ MonoBehaviour:
   m_GameObject: {fileID: 1485433362}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 519e1cfb6972401488e301c5bdeca225, type: 3}
+  m_Script: {fileID: 11500000, guid: 8aaeb2000d7a4bdc911ff3a8561d7655, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _prefabs:
-  - {fileID: 6279061692907111727, guid: b12601b30426d2348aa444af73fadc8b, type: 3}
-  _bulletsFactory: {fileID: 1248895611}
+  _shipReferences:
+  - Name: Default
+    Type: 1
+    View: {fileID: -6275709633913316943, guid: d6aef048296de6f42ace7002778b128b, type: 3}
+  - Name: Fast
+    Type: 2
+    View: {fileID: 5801943058378326943, guid: a2e1e75f09c57c849be233a7c34596e1, type: 3}
 --- !u!1 &1628886338
 GameObject:
   m_ObjectHideFlags: 0
@@ -1490,6 +1466,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1651081543}
   - component: {fileID: 1651081542}
+  - component: {fileID: 1651081544}
   m_Layer: 0
   m_Name: App
   m_TagString: Untagged
@@ -1510,13 +1487,36 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _factories:
-    ShipFactory: {fileID: 1485433363}
-    EnemyBulletsFactory: {fileID: 1248895611}
-    PlayerBulletsFactory: {fileID: 823375038}
-    AsteroidFactory: {fileID: 1485433366}
-    EnemiesFactory: {fileID: 1485433367}
+    PlayerShipViewFactory: {fileID: 1485433367}
+    EnemyBulletsViewFactory: {fileID: 1248895611}
+    PlayerBulletsViewFactory: {fileID: 823375038}
+    AsteroidViewFactory: {fileID: 1485433365}
+    EnemyShipViewFactory: {fileID: 1485433366}
   _shipInput: {fileID: 1628886339}
-  _viewport: {fileID: 2137367747}
+  _viewRoot: {fileID: 1651081544}
+  _shipsSettings:
+  - Name: Default
+    Type: 1
+    Stats:
+      MaxSpeed: 5
+      Acceleration: 12
+      Damping: 8
+      MaxHealth: 100
+      WeaponStats:
+        Damage: 25
+        BulletsSpeed: 7
+        ReloadTime: 1
+  - Name: Fast
+    Type: 2
+    Stats:
+      MaxSpeed: 7
+      Acceleration: 19
+      Damping: 19
+      MaxHealth: 75
+      WeaponStats:
+        Damage: 15
+        BulletsSpeed: 9
+        ReloadTime: 0.6
 --- !u!4 &1651081543
 Transform:
   m_ObjectHideFlags: 0
@@ -1535,6 +1535,20 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1651081544
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1651081541}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: eff4a216d82743ad92290b9cc3f2777a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _shipInterface: {fileID: 1472639361}
+  _viewport: {fileID: 2137367747}
 --- !u!1 &1857688273
 GameObject:
   m_ObjectHideFlags: 0

@@ -1,10 +1,12 @@
-﻿using Game.Runtime.Enemies;
+﻿using System.Collections.Generic;
+using Game.Runtime.Enemies;
+using Game.Runtime.Factories;
 using Game.Runtime.GameLoop;
 using Game.Runtime.Input.Ship;
 using Game.Runtime.Physics;
 using Game.Runtime.Ship;
 using Game.Runtime.Ship.Weapons;
-using Game.Runtime.View.Viewport;
+using Game.Runtime.View;
 using UnityEngine;
 
 namespace Game.Runtime.Application
@@ -13,7 +15,8 @@ namespace Game.Runtime.Application
     {
         [SerializeField] private Factories.Factories _factories;
         [SerializeField] private ShipInput _shipInput;
-        [SerializeField] private Viewport _viewport;
+        [SerializeField] private ViewRoot _viewRoot;
+        [SerializeField] private ShipReference[] _shipsSettings;
 
         private ILoop _loop;
 
@@ -24,32 +27,65 @@ namespace Game.Runtime.Application
             var shipColliderCaster = new ColliderCaster<IDamageable>(shipCollidersWorld);
             var enemiesCollidersWorld = new CollidersWorld<IDamageable>();
             var enemiesColliderCaster = new ColliderCaster<IDamageable>(enemiesCollidersWorld);
-            
-            _factories.EnemyBulletsFactory.Init(bulletsCollidersWorld, shipColliderCaster);
-            _factories.PlayerBulletsFactory.Init(bulletsCollidersWorld, enemiesColliderCaster);
-            _factories.AsteroidFactory.Init(shipColliderCaster, enemiesCollidersWorld);
-            _factories.EnemiesFactory.Init(enemiesCollidersWorld, shipColliderCaster);
-            _factories.ShipFactory.Init(shipCollidersWorld);
+            var shipReferences = new Dictionary<ShipType, ShipReference>();
+            IBulletsFactory enemyBulletsFactory;
 
-            var shipModel = _factories.ShipFactory.Create(ShipType.Fast, Vector3.zero, _shipInput);
-            _factories.EnemiesFactory.Create(new Vector3(0, 10));
+            FillReferences(shipReferences);
+
+            var enemiesFactory = new EnemiesFactory(
+                _factories.EnemyShipViewFactory,
+                enemyBulletsFactory = new BulletsFactory(
+                    bulletsCollidersWorld,
+                    shipColliderCaster,
+                    _factories.EnemyBulletsViewFactory),
+                enemiesCollidersWorld,
+                shipColliderCaster);
+            
+            var asteroidsFactory = new AsteroidFactory(
+                _viewRoot.Viewport,
+                shipColliderCaster,
+                enemiesCollidersWorld,
+                _factories.AsteroidViewFactory);
+            
+            var playerBulletsFactory = new BulletsFactory(
+                bulletsCollidersWorld,
+                enemiesColliderCaster,
+                _factories.PlayerBulletsViewFactory);
+
+            var shipFactory = new ShipFactory(
+                playerBulletsFactory,
+                shipCollidersWorld,
+                _factories.PlayerShipViewFactory,
+                _viewRoot,
+                shipReferences);
+
+            shipFactory.Create(ShipType.Fast, Vector3.zero, _shipInput);
+            enemiesFactory.Create(new Vector3(0, 10));
 
             _loop = new GameObjectsLoop(new ILoop[]
             {
-                _factories.EnemiesFactory,
-                _factories.EnemyBulletsFactory,
-                _factories.PlayerBulletsFactory,
-                _factories.AsteroidFactory,
+                enemiesFactory,
+                enemyBulletsFactory,
+                playerBulletsFactory,
+                asteroidsFactory,
+                shipFactory,
                 new AsteroidsSpawner(
-                    _factories.AsteroidFactory,
-                    _viewport),
-                shipModel
+                    asteroidsFactory,
+                    _viewRoot.Viewport)
             });
         }
 
         private void Update()
         {
             _loop.Execute(Time.deltaTime);
+        }
+
+        private void FillReferences(IDictionary<ShipType, ShipReference> dict)
+        {
+            foreach (var reference in _shipsSettings)
+            {
+                dict.Add(reference.Type, reference);
+            }
         }
     }
 }

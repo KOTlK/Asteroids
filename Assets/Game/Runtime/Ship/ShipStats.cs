@@ -1,13 +1,15 @@
 ﻿using System;
+using Game.Runtime.Ship.Weapons;
 
 namespace Game.Runtime.Ship
 {
     [Serializable]
-    public class ShipStats
+    public struct ShipStats
     {
         public float MaxSpeed;
         public float Acceleration;
         public float Damping;
         public float MaxHealth;
+        public WeaponStats WeaponStats;
     }
 }

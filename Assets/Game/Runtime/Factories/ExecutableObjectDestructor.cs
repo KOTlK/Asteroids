@@ -4,13 +4,13 @@ using Game.Runtime.GameLoop;
 
 namespace Game.Runtime.Factories
 {
-    public class ExecutableObjectDestroyer<T> : IObjectDestroyer<T>, ILoop
+    public class ExecutableObjectDestructor<T> : IObjectDestructor<T>, ILoop
     where T : IDisposable, ILoop
     {
         private readonly List<T> _spawned = new();
         private readonly Queue<T> _destroyQueue = new();
 
-        public ExecutableObjectDestroyer()
+        public ExecutableObjectDestructor()
         {
         }
 

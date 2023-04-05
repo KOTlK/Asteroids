@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using Game.Runtime.Enemies;
+using Game.Runtime.Factories.View;
 using Game.Runtime.GameLoop;
 using Game.Runtime.Input.Ship;
 using Game.Runtime.Physics;
@@ -8,20 +9,20 @@ using UnityEngine;
 
 namespace Game.Runtime.Factories
 {
-    public class EnemiesFactory : MonoBehaviour, IObjectDestroyer<EnemyShip>, ILoop
+    public class EnemiesFactory : IObjectDestructor<EnemyShip>, ILoop
     {
-        [SerializeField] private EnemyShipView[] _prefabs;
-        [SerializeField] private BulletsFactory _bulletsFactory;
+        private readonly IEnemyShipViewFactory _viewFactory;
+        private readonly IBulletsFactory _bulletsFactory;
+        private readonly ICollidersWorld<IDamageable> _collidersWorld;
+        private readonly IColliderCaster<IDamageable> _targetColliders;
+        private readonly ExecutableObjectDestructor<EnemyShip> _destructor = new();
 
-        private readonly ExecutableObjectDestroyer<EnemyShip> _destroyer = new();
-        
-        private ICollidersWorld<IDamageable> _collidersWorld;
-        private IColliderCaster<IDamageable> _targetColliders;
-
-        public void Init(ICollidersWorld<IDamageable> collidersWorld, IColliderCaster<IDamageable> targets)
+        public EnemiesFactory(IEnemyShipViewFactory viewFactory, IBulletsFactory bulletsFactory, ICollidersWorld<IDamageable> collidersWorld, IColliderCaster<IDamageable> targetColliders)
         {
+            _viewFactory = viewFactory;
+            _bulletsFactory = bulletsFactory;
             _collidersWorld = collidersWorld;
-            _targetColliders = targets;
+            _targetColliders = targetColliders;
         }
 
         //temp
@@ -29,7 +30,7 @@ namespace Game.Runtime.Factories
 
         public EnemyShip Create(Vector3 position)
         {
-            var view = Instantiate(_prefabs[Random.Range(0, _prefabs.Length)], position, Quaternion.Euler(0, 0, 180));
+            var view = _viewFactory.Create(position);
             var collider = new AABBCollider(new AABB()
             {
                 Center = position,
@@ -48,7 +49,7 @@ namespace Game.Runtime.Factories
 
             _inputs.Add(input);
             _collidersWorld.Add(collider, model);
-            _destroyer.Add(model);
+            _destructor.Add(model);
             
             return model;
         }
@@ -56,7 +57,7 @@ namespace Game.Runtime.Factories
         public void Destroy(EnemyShip obj)
         {
             _collidersWorld.Remove(obj);
-            _destroyer.Destroy(obj);
+            _destructor.Destroy(obj);
         }
 
         public void Execute(float deltaTime)
@@ -65,7 +66,7 @@ namespace Game.Runtime.Factories
             {
                 input.Execute(deltaTime);
             }
-            _destroyer.Execute(deltaTime);
+            _destructor.Execute(deltaTime);
         }
     }
 }
