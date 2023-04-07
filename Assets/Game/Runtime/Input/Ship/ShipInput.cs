@@ -1,5 +1,4 @@
-﻿using System;
-using UnityEngine;
+﻿using UnityEngine;
 
 namespace Game.Runtime.Input.Ship
 {
@@ -7,14 +6,14 @@ namespace Game.Runtime.Input.Ship
     {
         public bool ShootingMainGun => UnityEngine.Input.GetKey(KeyCode.Space);
 
-        public Vector2 MovementDirection
+        public Vector3 MovementDirection
         {
             get
             {
                 var x = UnityEngine.Input.GetAxisRaw("Horizontal");
                 var y = UnityEngine.Input.GetAxisRaw("Vertical");
 
-                return new Vector2(x, y);
+                return new Vector3(x, y, 0);
             }
         }
     }

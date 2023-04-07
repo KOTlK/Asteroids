@@ -39,7 +39,8 @@ namespace Game.Runtime.Application
                     shipColliderCaster,
                     _factories.EnemyBulletsViewFactory),
                 enemiesCollidersWorld,
-                shipColliderCaster);
+                shipColliderCaster,
+                _viewRoot.Viewport);
             
             var asteroidsFactory = new AsteroidFactory(
                 _viewRoot.Viewport,
@@ -52,7 +53,7 @@ namespace Game.Runtime.Application
                 enemiesColliderCaster,
                 _factories.PlayerBulletsViewFactory);
 
-            var shipFactory = new ShipFactory(
+            var shipFactory = new PlayerShipFactory(
                 playerBulletsFactory,
                 shipCollidersWorld,
                 _factories.PlayerShipViewFactory,
@@ -60,7 +61,6 @@ namespace Game.Runtime.Application
                 shipReferences);
 
             shipFactory.Create(ShipType.Fast, Vector3.zero, _shipInput);
-            enemiesFactory.Create(new Vector3(0, 10));
 
             _loop = new GameObjectsLoop(new ILoop[]
             {
@@ -71,6 +71,9 @@ namespace Game.Runtime.Application
                 shipFactory,
                 new AsteroidsSpawner(
                     asteroidsFactory,
+                    _viewRoot.Viewport),
+                new EnemiesSpawner(2f,
+                    enemiesFactory,
                     _viewRoot.Viewport)
             });
         }

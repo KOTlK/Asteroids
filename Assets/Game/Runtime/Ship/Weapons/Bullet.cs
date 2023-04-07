@@ -1,4 +1,5 @@
-﻿using Game.Runtime.GameLoop;
+﻿using Game.Runtime.Enemies;
+using Game.Runtime.GameLoop;
 using Game.Runtime.Physics;
 using UnityEngine;
 
@@ -6,25 +7,23 @@ namespace Game.Runtime.Ship.Weapons
 {
     public class Bullet : IBullet
     {
-        private readonly float _damage;
         private readonly float _speed;
         private readonly ICollider _collider;
-        private readonly IColliderCaster<IDamageable> _colliderCaster;
         private readonly IBulletView _view;
         private readonly IObjectDestructor<IBullet> _destructor;
+        private readonly IKamikaze _kamikaze;
 
         private float _lifeTime;
         private const float MaxLifeTime = 15f;
 
-        public Bullet(ICollider collider, IColliderCaster<IDamageable> colliderCaster, IBulletView view, IObjectDestructor<IBullet> destructor, float damage, float speed, Vector3 startPosition)
+        public Bullet(float speed, ICollider collider, IBulletView view, IObjectDestructor<IBullet> destructor, IKamikaze kamikaze)
         {
-            _damage = damage;
             _speed = speed;
             _collider = collider;
-            _colliderCaster = colliderCaster;
             _view = view;
             _destructor = destructor;
-            _position = startPosition;
+            _kamikaze = kamikaze;
+            _position = collider.Position;
         }
 
         private Vector3 _position;
@@ -39,17 +38,16 @@ namespace Game.Runtime.Ship.Weapons
                 _destructor.Destroy(this);
                 return;
             }
+
+            _kamikaze.Execute(deltaTime);
             
             _position += _direction * (_speed * deltaTime);
 
             _collider.Position = _position;
             _view.Position = _position;
 
-            var castResult = _colliderCaster.Cast(_collider);
-
-            if (castResult.Occure)
+            if (_kamikaze.Destroyed)
             {
-                castResult.Target.ApplyDamage(_damage);
                 _view.PlayHitAnimation();
                 _view.DisposeOnAnimationEnd();
                 _destructor.Destroy(this);

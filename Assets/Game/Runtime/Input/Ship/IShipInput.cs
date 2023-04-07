@@ -1,11 +1,8 @@
-﻿using System;
-using UnityEngine;
+﻿using Game.Runtime.Input.Weapon;
 
 namespace Game.Runtime.Input.Ship
 {
-    public interface IShipInput
+    public interface IShipInput : IWeaponInput, IMovementInput
     {
-        bool ShootingMainGun { get; }
-        Vector2 MovementDirection { get; }
     }
 }

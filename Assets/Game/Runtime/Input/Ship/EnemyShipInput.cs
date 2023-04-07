@@ -1,22 +1,26 @@
-﻿using System;
-using Game.Runtime.GameLoop;
-using UnityEngine;
+﻿using UnityEngine;
+using Random = System.Random;
 
 namespace Game.Runtime.Input.Ship
 {
-    public class EnemyShipInput : IShipInput, ILoop
+    public class EnemyShipInput : IEnemyShipInput
     {
         private readonly float _delay;
+        private readonly float _switchDirectionChance;
+        private readonly Random _random = new();
 
         private float _timePassed;
 
-        public EnemyShipInput(float delay)
+        public EnemyShipInput(float delay, float switchDirectionChance, Vector3 startDirection)
         {
             _delay = delay;
+            _switchDirectionChance = switchDirectionChance;
+            _timePassed = delay;
+            MovementDirection = startDirection;
         }
 
         public bool ShootingMainGun { get; private set; }
-        public Vector2 MovementDirection { get; }
+        public Vector3 MovementDirection { get; private set; }
         
         public void Execute(float deltaTime)
         {
@@ -28,6 +32,12 @@ namespace Game.Runtime.Input.Ship
             {
                 ShootingMainGun = true;
                 _timePassed = 0;
+
+                var randomValue = (float)_random.NextDouble();
+                if (randomValue <= _switchDirectionChance)
+                {
+                    MovementDirection = -MovementDirection;
+                }
             }
         }
     }

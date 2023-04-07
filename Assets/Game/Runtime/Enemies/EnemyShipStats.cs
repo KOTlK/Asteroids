@@ -1,4 +1,5 @@
 ﻿using System;
+using Game.Runtime.Ship.Weapons;
 
 namespace Game.Runtime.Enemies
 {
@@ -7,8 +8,7 @@ namespace Game.Runtime.Enemies
     {
         public float Speed;
         public float DamageOnCollision;
-        public float Damage;
-        public float BulletsSpeed;
         public float MaxHealth;
+        public WeaponStats WeaponStats;
     }
 }

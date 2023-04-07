@@ -1,74 +1,49 @@
-﻿using Game.Runtime.Factories;
-using Game.Runtime.GameLoop;
-using Game.Runtime.Input.Ship;
-using Game.Runtime.Physics;
+﻿using Game.Runtime.GameLoop;
 using Game.Runtime.Ship;
-using Game.Runtime.Ship.Hp;
-using Game.Runtime.Ship.Weapons;
-using UnityEngine;
+using Game.Runtime.View.Ship;
 
 namespace Game.Runtime.Enemies
 {
     public class EnemyShip : IShip
     {
+        private readonly IShip _origin;
+        private readonly IKamikaze _kamikaze;
         private readonly IShipView _shipVisualization;
         private readonly IObjectDestructor<EnemyShip> _destructor;
-        private readonly IBulletsFactory _bulletsFactory;
-        private readonly ICollider _collider;
-        private readonly IShipInput _input;
-        private readonly IColliderCaster<IDamageable> _colliderCaster;
-        private readonly EnemyShipStats _stats;
-        private readonly IHealth _health;
 
-        private Vector3 _position;
-
-        public EnemyShip(Vector3 startPosition, IShipView shipVisualization, IObjectDestructor<EnemyShip> destructor, IBulletsFactory bulletsFactory, ICollider collider, IShipInput input, IColliderCaster<IDamageable> colliderCaster, EnemyShipStats stats)
+        public EnemyShip(IShip origin, IShipView shipVisualization, IObjectDestructor<EnemyShip> destructor, IKamikaze kamikaze)
         {
-            _position = startPosition;
+            _origin = origin;
+            _kamikaze = kamikaze;
             _shipVisualization = shipVisualization;
             _destructor = destructor;
-            _bulletsFactory = bulletsFactory;
-            _collider = collider;
-            _input = input;
-            _colliderCaster = colliderCaster;
-            _stats = stats;
-            _health = new Health(stats.MaxHealth);
         }
 
         public void Execute(float deltaTime)
         {
-            _position += Vector3.down * (_stats.Speed * deltaTime);
+            _origin.Execute(deltaTime);
+            _kamikaze.Execute(deltaTime);
 
-            _collider.Position = _position;
-            _shipVisualization.Position = _position;
-
-            var raycastHit = _colliderCaster.Cast(_collider);
-
-            if (raycastHit.Occure)
+            if (_kamikaze.Destroyed)
             {
-                raycastHit.Target.ApplyDamage(_stats.DamageOnCollision);
                 _shipVisualization.PlayExplosionAnimation();
                 _shipVisualization.DisposeOnAnimationEnd();
                 _destructor.Destroy(this);
-                return;
-            }
-
-            if (_input.ShootingMainGun)
-            {
-                var bullet = _bulletsFactory.Create(_shipVisualization.Pivot, _stats.Damage, _stats.BulletsSpeed);
-                bullet.Shoot(Vector3.down);
             }
         }
 
         public void Dispose()
         {
             _shipVisualization.Dispose();
+            _origin.Dispose();
         }
+
+        public bool IsDead => _origin.IsDead;
 
         public void ApplyDamage(float amount)
         {
-            _health.Lose(amount);
-            if (_health.IsOver)
+            _origin.ApplyDamage(amount);
+            if (IsDead)
             {
                 _shipVisualization.PlayExplosionAnimation();
                 _shipVisualization.DisposeOnAnimationEnd();
@@ -78,7 +53,12 @@ namespace Game.Runtime.Enemies
 
         public void RestoreHealth(float amount)
         {
-            _health.Restore(amount);
+            _origin.RestoreHealth(amount);
+        }
+
+        public void Visualize(IShipInterface view)
+        {
+            _origin.Visualize(view);
         }
     }
 }

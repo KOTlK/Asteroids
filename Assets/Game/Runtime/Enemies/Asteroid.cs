@@ -12,22 +12,20 @@ namespace Game.Runtime.Enemies
         private readonly IAsteroidView _view;
         private readonly IObjectDestructor<Asteroid> _destructor;
         private readonly ICollider _collider;
-        private readonly IColliderCaster<IDamageable> _colliderCaster;
         private readonly IViewport _viewport;
         private readonly float _speed;
-        private readonly float _damage;
+        private readonly IKamikaze _kamikaze;
 
         private Vector3 _position;
 
-        public Asteroid(IAsteroidView view, IViewport viewport, IObjectDestructor<Asteroid> destructor, ICollider collider, IColliderCaster<IDamageable> colliderCaster, float speed, float damage)
+        public Asteroid(IAsteroidView view, IViewport viewport, IObjectDestructor<Asteroid> destructor, ICollider collider, float speed, IKamikaze kamikaze)
         {
             _view = view;
-            _viewport = viewport;
             _destructor = destructor;
             _collider = collider;
-            _colliderCaster = colliderCaster;
+            _viewport = viewport;
             _speed = speed;
-            _damage = damage;
+            _kamikaze = kamikaze;
             _position = collider.Position;
         }
 
@@ -38,11 +36,10 @@ namespace Game.Runtime.Enemies
             _view.Position = _position;
             _collider.Position = _position;
 
-            var castHit = _colliderCaster.Cast(_collider);
+            _kamikaze.Execute(deltaTime);
 
-            if (castHit.Occure)
+            if (_kamikaze.Destroyed)
             {
-                castHit.Target.ApplyDamage(_damage);
                 _view.PlayExplosionAnimation();
                 _view.DisposeOnAnimationEnd();
                 _destructor.Destroy(this);
@@ -59,6 +56,8 @@ namespace Game.Runtime.Enemies
         {
             _view.Dispose();
         }
+
+        public bool IsDead { get; }
 
         public void ApplyDamage(float amount)
         {

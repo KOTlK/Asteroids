@@ -1503,7 +1503,7 @@ MonoBehaviour:
       Damping: 8
       MaxHealth: 100
       WeaponStats:
-        Damage: 25
+        Damage: 30
         BulletsSpeed: 7
         ReloadTime: 1
   - Name: Fast
@@ -1514,7 +1514,7 @@ MonoBehaviour:
       Damping: 19
       MaxHealth: 75
       WeaponStats:
-        Damage: 15
+        Damage: 20
         BulletsSpeed: 9
         ReloadTime: 0.6
 --- !u!4 &1651081543

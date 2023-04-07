@@ -33,13 +33,16 @@ namespace Game.Runtime.Factories
                 Center = startPosition,
                 Radius = Radius
             });
-            var asteroid = new Asteroid(view,
+            var asteroid = new Asteroid(
+                view,
                 _viewport,
                 this,
                 collider,
-                _targetColliders,
                 speed,
-                damage);
+                new Kamikaze(
+                    collider,
+                    _targetColliders,
+                    damage));
 
             _destructor.Add(asteroid);
             _asteroidsWorld.Add(collider, asteroid);

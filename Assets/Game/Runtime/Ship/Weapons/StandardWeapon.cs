@@ -19,6 +19,7 @@ namespace Game.Runtime.Ship.Weapons
             _bulletsFactory = bulletsFactory;
             _slot = slot;
             _stats = stats;
+            _reloadElapsedTime = stats.ReloadTime;
         }
 
         public bool CanShoot => _reloadElapsedTime >= _stats.ReloadTime;

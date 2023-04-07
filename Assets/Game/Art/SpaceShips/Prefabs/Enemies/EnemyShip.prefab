@@ -232,9 +232,11 @@ MonoBehaviour:
   Stats:
     Speed: 3
     DamageOnCollision: 15
-    Damage: 10
-    BulletsSpeed: 7
     MaxHealth: 50
+    WeaponStats:
+      Damage: 10
+      BulletsSpeed: 7
+      ReloadTime: 1
 --- !u!95 &7983607107482392224
 Animator:
   serializedVersion: 5
