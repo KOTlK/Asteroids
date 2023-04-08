@@ -18,22 +18,19 @@ namespace Game.Runtime.Factories
         private readonly ICollidersWorld<IDamageable> _collidersWorld;
         private readonly IPlayerShipViewFactory _viewFactory;
         private readonly IViewRoot _viewRoot;
-        private readonly Dictionary<ShipType, ShipReference> _shipReferences;
         private readonly ExecutableObjectDestructor<PlayerShip> _destructor = new();
 
-        public PlayerShipFactory(IBulletsFactory bulletsFactory, ICollidersWorld<IDamageable> collidersWorld, IPlayerShipViewFactory viewFactory, IViewRoot viewRoot, Dictionary<ShipType, ShipReference> shipReferences)
+        public PlayerShipFactory(IBulletsFactory bulletsFactory, ICollidersWorld<IDamageable> collidersWorld, IPlayerShipViewFactory viewFactory, IViewRoot viewRoot)
         {
             _bulletsFactory = bulletsFactory;
             _collidersWorld = collidersWorld;
             _viewFactory = viewFactory;
             _viewRoot = viewRoot;
-            _shipReferences = shipReferences;
         }
 
-        public PlayerShip Create(ShipType type, Vector3 position, IShipInput input)
+        public PlayerShip Create(ShipReference reference, Vector3 position, IShipInput input)
         {
-            var reference = _shipReferences[type];
-            var view = _viewFactory.Create(type);
+            var view = _viewFactory.Create(reference.Type);
             var collider = new AABBCollider(new AABB()
             {
                 Size = new Vector3(1, 1),
@@ -73,6 +70,11 @@ namespace Game.Runtime.Factories
         }
 
         public void Execute(float deltaTime) => _destructor.Execute(deltaTime);
+
+        public void Dispose()
+        {
+            _destructor.Dispose();
+        }
     }
 
     [Serializable]

@@ -11,13 +11,15 @@ namespace Game.Runtime.Enemies
         private readonly float _spawnRate;
         private readonly IEnemiesFactory _enemiesFactory;
         private readonly IViewport _viewport;
+        private readonly int _maxCount;
         private readonly Random _random = new Random();
 
-        public EnemiesSpawner(float spawnRate, IEnemiesFactory enemiesFactory, IViewport viewport)
+        public EnemiesSpawner(float spawnRate, IEnemiesFactory enemiesFactory, IViewport viewport, int maxCount)
         {
             _spawnRate = spawnRate;
             _enemiesFactory = enemiesFactory;
             _viewport = viewport;
+            _maxCount = maxCount;
         }
 
         private float _timePassed;
@@ -26,7 +28,7 @@ namespace Game.Runtime.Enemies
         {
             _timePassed += deltaTime;
 
-            if (_timePassed >= _spawnRate)
+            if (_timePassed >= _spawnRate && _enemiesFactory.ActiveCount < _maxCount)
             {
                 _timePassed = 0;
                 var x = (float)_random.NextDouble();

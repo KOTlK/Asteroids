@@ -2,11 +2,11 @@
 
 namespace Game.Runtime.GameLoop
 {
-    public class GameObjectsLoop : ILoop, IDisposable
+    public class DisposableGameObjectsGroup : IDisposableLoop
     {
         private readonly ILoop[] _gameObjects;
 
-        public GameObjectsLoop(ILoop[] gameObjects)
+        public DisposableGameObjectsGroup(ILoop[] gameObjects)
         {
             _gameObjects = gameObjects;
         }

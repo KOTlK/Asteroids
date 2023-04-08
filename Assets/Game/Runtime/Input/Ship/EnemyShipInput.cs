@@ -34,11 +34,17 @@ namespace Game.Runtime.Input.Ship
                 _timePassed = 0;
 
                 var randomValue = (float)_random.NextDouble();
+                var randomDirection = UnityEngine.Random.insideUnitCircle.normalized;
                 if (randomValue <= _switchDirectionChance)
                 {
-                    MovementDirection = -MovementDirection;
+                    MovementDirection = randomDirection;
                 }
             }
+        }
+
+        public void ReverseDirection()
+        {
+            MovementDirection = -MovementDirection;
         }
     }
 }

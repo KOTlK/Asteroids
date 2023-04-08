@@ -38,5 +38,13 @@ namespace Game.Runtime.Factories
                 obj.Execute(deltaTime);
             }
         }
+
+        public void Dispose()
+        {
+            foreach (var obj in _spawned)
+            {
+                obj.Dispose();
+            }
+        }
     }
 }

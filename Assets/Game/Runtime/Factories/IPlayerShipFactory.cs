@@ -7,6 +7,6 @@ namespace Game.Runtime.Factories
 {
     public interface IPlayerShipFactory : IObjectDestructor<PlayerShip>, ILoop
     {
-        PlayerShip Create(ShipType type, Vector3 position, IShipInput input);
+        PlayerShip Create(ShipReference reference, Vector3 position, IShipInput input);
     }
 }

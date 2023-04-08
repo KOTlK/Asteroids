@@ -50,5 +50,10 @@ namespace Game.Runtime.Factories
         }
 
         public void Execute(float deltaTime) => _destructor.Execute(deltaTime);
+
+        public void Dispose()
+        {
+            _destructor.Dispose();
+        }
     }
 }

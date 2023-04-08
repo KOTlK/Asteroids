@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using Game.Runtime.Enemies;
 using Game.Runtime.Factories.View;
 using Game.Runtime.Input.Ship;
@@ -8,10 +9,11 @@ using Game.Runtime.Ship.Movement;
 using Game.Runtime.Ship.Weapons;
 using Game.Runtime.View.Viewport;
 using UnityEngine;
+using Random = UnityEngine.Random;
 
 namespace Game.Runtime.Factories
 {
-    public class EnemiesFactory : IEnemiesFactory
+    public class EnemiesFactory : IEnemiesFactory, IDisposable
     {
         private readonly IEnemyShipViewFactory _viewFactory;
         private readonly IBulletsFactory _bulletsFactory;
@@ -31,6 +33,8 @@ namespace Game.Runtime.Factories
 
         //temp
         private readonly List<EnemyShipInput> _inputs = new();
+
+        public int ActiveCount { get; private set; }
 
         public EnemyShip Create(Vector3 position)
         {
@@ -69,7 +73,7 @@ namespace Game.Runtime.Factories
             _inputs.Add(input);
             _collidersWorld.Add(collider, model);
             _destructor.Add(model);
-            
+            ActiveCount++;
             return model;
         }
 
@@ -77,6 +81,7 @@ namespace Game.Runtime.Factories
         {
             _collidersWorld.Remove(obj);
             _destructor.Destroy(obj);
+            ActiveCount--;
         }
 
         public void Execute(float deltaTime)
@@ -86,6 +91,11 @@ namespace Game.Runtime.Factories
                 input.Execute(deltaTime);
             }
             _destructor.Execute(deltaTime);
+        }
+
+        public void Dispose()
+        {
+            _destructor.Dispose();
         }
     }
 }

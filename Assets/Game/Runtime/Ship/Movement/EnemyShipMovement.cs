@@ -14,11 +14,6 @@ namespace Game.Runtime.Ship.Movement
         private readonly IShipView _shipView;
         private readonly ICollider _shipCollider;
 
-        public EnemyShipMovement(float speed, IEnemyShipInput input, IViewport viewport, IShipView shipView,
-            ICollider shipCollider) : this(speed, input, viewport, shipView, shipCollider, Vector3.zero)
-        {
-        }
-        
         public EnemyShipMovement(float speed, IEnemyShipInput input, IViewport viewport, IShipView shipView, ICollider shipCollider, Vector3 startPosition)
         {
             _input = input;
@@ -44,6 +39,11 @@ namespace Game.Runtime.Ship.Movement
             else if (viewportPosition.x >= 1.1f)
             {
                 nextPosition.x = _viewport.ViewportToWorld(new Vector3(-0.1f, 0, 0)).x;
+            }
+
+            if (viewportPosition.y is > 1 or < 0)
+            {
+                _input.ReverseDirection();
             }
 
             Position = nextPosition;
