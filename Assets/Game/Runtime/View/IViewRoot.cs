@@ -8,6 +8,8 @@ namespace Game.Runtime.View
     {
         IShipInterface ShipInterface { get; }
         IMainMenu MainMenu { get; }
+        ILoseScreen LoseScreen { get; }
+        IInGameView InGameView { get; }
         IViewport Viewport { get; }
     }
 }

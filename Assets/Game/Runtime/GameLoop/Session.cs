@@ -1,10 +1,12 @@
 ﻿using Game.Runtime.Enemies;
 using Game.Runtime.Factories;
+using Game.Runtime.GameLoop.Score;
 using Game.Runtime.Input.Ship;
 using Game.Runtime.Physics;
 using Game.Runtime.Ship;
 using Game.Runtime.Ship.Weapons;
 using Game.Runtime.View;
+using Game.Runtime.View.Score;
 using UnityEngine;
 
 namespace Game.Runtime.GameLoop
@@ -17,6 +19,8 @@ namespace Game.Runtime.GameLoop
 
         private IDisposableLoop _loop;
         private IShip _player;
+        private IScore _score;
+        private ShipReference _selectedShip;
 
         public Session(Factories.Factories factories, IViewRoot viewRoot, IShipInput playerInput)
         {
@@ -29,16 +33,17 @@ namespace Game.Runtime.GameLoop
 
         public void Start(ShipReference selectedShip)
         {
+            _selectedShip = selectedShip;
             ICollidersWorld<IBullet> bulletsCollidersWorld;
             ICollidersWorld<IDamageable> shipCollidersWorld;
             IColliderCaster<IDamageable> shipColliderCaster;
-            ICollidersWorld<IDamageable> enemiesCollidersWorld;
+            ICollidersWorld<IDamageableTarget> enemiesCollidersWorld;
             IBulletsFactory enemyBulletsFactory;
             IEnemiesFactory enemiesFactory;
             IAsteroidsFactory asteroidsFactory;
             IBulletsFactory playerBulletsFactory;
             IPlayerShipFactory shipFactory;
-            var enemiesColliderCaster = new ColliderCaster<IDamageable>(enemiesCollidersWorld = new CollidersWorld<IDamageable>());
+            var enemiesColliderCaster = new ColliderCaster<IDamageableTarget>(enemiesCollidersWorld = new CollidersWorld<IDamageableTarget>());
 
             _loop = new DisposableGameObjectsGroup(new ILoop[]
             {
@@ -54,10 +59,11 @@ namespace Game.Runtime.GameLoop
                     _viewRoot.Viewport),
                 enemyBulletsFactory,
                 shipFactory = new PlayerShipFactory(
-                    playerBulletsFactory = new BulletsFactory(
+                    playerBulletsFactory = new PlayerBulletsFactory(
                         bulletsCollidersWorld,
                         enemiesColliderCaster,
-                        _factories.PlayerBulletsViewFactory),
+                        _factories.PlayerBulletsViewFactory,
+                        _score = new Score.Score(_viewRoot.InGameView)),
                     shipCollidersWorld,
                     _factories.PlayerShipViewFactory,
                     _viewRoot),
@@ -80,6 +86,12 @@ namespace Game.Runtime.GameLoop
             _player = shipFactory.Create(selectedShip, Vector3.zero, _playerInput);
         }
 
+        public void Restart()
+        {
+            Dispose();
+            Start(_selectedShip);
+        }
+
         public void Execute(float deltaTime)
         {
             _loop.Execute(deltaTime);
@@ -88,6 +100,11 @@ namespace Game.Runtime.GameLoop
         public void Dispose()
         {
             _loop.Dispose();
+        }
+
+        public void Visualize(IScoreView view)
+        {
+            _score.Visualize(view);
         }
     }
 }

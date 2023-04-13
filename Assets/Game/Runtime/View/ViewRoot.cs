@@ -10,9 +10,13 @@ namespace Game.Runtime.View
         [SerializeField] private ShipInterface _shipInterface;
         [SerializeField] private Viewport.Viewport _viewport;
         [SerializeField] private MainMenu _mainMenu;
+        [SerializeField] private LoseScreen _loseScreen;
+        [SerializeField] private InGameView _inGameView;
         
         public IShipInterface ShipInterface => _shipInterface;
         public IMainMenu MainMenu => _mainMenu;
+        public ILoseScreen LoseScreen => _loseScreen;
+        public IInGameView InGameView => _inGameView;
         public IViewport Viewport => _viewport;
     }
 }

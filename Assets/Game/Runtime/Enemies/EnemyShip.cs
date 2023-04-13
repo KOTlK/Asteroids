@@ -1,10 +1,12 @@
-﻿using Game.Runtime.GameLoop;
+﻿using System;
+using Game.Runtime.GameLoop;
+using Game.Runtime.GameLoop.Score;
 using Game.Runtime.Ship;
 using Game.Runtime.View.Ship;
 
 namespace Game.Runtime.Enemies
 {
-    public class EnemyShip : IShip
+    public class EnemyShip : IShip, IDamageableTarget
     {
         private readonly IShip _origin;
         private readonly IKamikaze _kamikaze;
@@ -17,7 +19,10 @@ namespace Game.Runtime.Enemies
             _kamikaze = kamikaze;
             _shipVisualization = shipVisualization;
             _destructor = destructor;
+            ScorePerKill = new Random().Next(1, 10); // Hardcode yeah yeah
         }
+
+        public int ScorePerKill { get; }
 
         public void Execute(float deltaTime)
         {
@@ -39,6 +44,7 @@ namespace Game.Runtime.Enemies
         }
 
         public bool IsDead => _origin.IsDead;
+
 
         public void ApplyDamage(float amount)
         {

@@ -1,5 +1,6 @@
 ﻿using System;
 using Game.Runtime.GameLoop;
+using Game.Runtime.GameLoop.Score;
 using Game.Runtime.Physics;
 using Game.Runtime.Ship.Weapons;
 using Game.Runtime.View.Viewport;
@@ -7,7 +8,7 @@ using UnityEngine;
 
 namespace Game.Runtime.Enemies
 {
-    public class Asteroid : ILoop, IDisposable, IDamageable
+    public class Asteroid : ILoop, IDisposable, IDamageableTarget
     {
         private readonly IAsteroidView _view;
         private readonly IObjectDestructor<Asteroid> _destructor;
@@ -27,7 +28,12 @@ namespace Game.Runtime.Enemies
             _speed = speed;
             _kamikaze = kamikaze;
             _position = collider.Position;
+            ScorePerKill = new System.Random().Next(1, 5);
         }
+
+        public int ScorePerKill { get; }
+        public bool IsDead { get; private set; } = false;
+
 
         public void Execute(float deltaTime)
         {
@@ -57,10 +63,10 @@ namespace Game.Runtime.Enemies
             _view.Dispose();
         }
 
-        public bool IsDead { get; }
 
         public void ApplyDamage(float amount)
         {
+            IsDead = true;
             _view.PlayExplosionAnimation();
             _view.DisposeOnAnimationEnd();
             _destructor.Destroy(this);

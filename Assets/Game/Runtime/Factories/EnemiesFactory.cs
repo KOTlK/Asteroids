@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using Game.Runtime.Enemies;
 using Game.Runtime.Factories.View;
+using Game.Runtime.GameLoop.Score;
 using Game.Runtime.Input.Ship;
 using Game.Runtime.Physics;
 using Game.Runtime.Ship.Hp;
@@ -13,16 +14,16 @@ using Random = UnityEngine.Random;
 
 namespace Game.Runtime.Factories
 {
-    public class EnemiesFactory : IEnemiesFactory, IDisposable
+    public class EnemiesFactory : IEnemiesFactory
     {
         private readonly IEnemyShipViewFactory _viewFactory;
         private readonly IBulletsFactory _bulletsFactory;
-        private readonly ICollidersWorld<IDamageable> _collidersWorld;
+        private readonly ICollidersWorld<IDamageableTarget> _collidersWorld;
         private readonly IColliderCaster<IDamageable> _targetColliders;
         private readonly IViewport _viewport;
         private readonly ExecutableObjectDestructor<EnemyShip> _destructor = new();
 
-        public EnemiesFactory(IEnemyShipViewFactory viewFactory, IBulletsFactory bulletsFactory, ICollidersWorld<IDamageable> collidersWorld, IColliderCaster<IDamageable> targetColliders, IViewport viewport)
+        public EnemiesFactory(IEnemyShipViewFactory viewFactory, IBulletsFactory bulletsFactory, ICollidersWorld<IDamageableTarget> collidersWorld, IColliderCaster<IDamageable> targetColliders, IViewport viewport)
         {
             _viewFactory = viewFactory;
             _bulletsFactory = bulletsFactory;

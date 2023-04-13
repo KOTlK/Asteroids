@@ -1,4 +1,5 @@
-﻿using TMPro;
+﻿using Game.Runtime.View.Health;
+using TMPro;
 using UnityEngine;
 
 namespace Game.Runtime.View.Ship
@@ -7,7 +8,7 @@ namespace Game.Runtime.View.Ship
     {
         [SerializeField] private TMP_Text _velocity;
         [SerializeField] private TMP_Text _position;
-        [SerializeField] private TMP_Text _health;
+        [SerializeField] private HealthView _healthView;
         
         public void DisplayVelocity(Vector3 velocity)
         {
@@ -19,9 +20,6 @@ namespace Game.Runtime.View.Ship
             _position.text = $"{position}";
         }
 
-        public void DisplayHealth(float amount)
-        {
-            _health.text = amount.ToString();
-        }
+        public void DisplayHealth(float amount) => _healthView.DisplayHealth(amount);
     }
 }

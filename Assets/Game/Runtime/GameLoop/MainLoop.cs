@@ -26,8 +26,9 @@ namespace Game.Runtime.GameLoop
                     {
                         mainMenu.StartGameButton.Release();
                         _session.Start(mainMenu.ShipPicker.Selected.Type);
-                        _executingLoop = _session;
+                        _viewRoot.InGameView.IsActive = true;
                         mainMenu.IsActive = false;
+                        _executingLoop = _session;
                         return;
                     }
 
@@ -43,14 +44,43 @@ namespace Game.Runtime.GameLoop
                 case ISession session:
                     if (session.GameLose)
                     {
-                        session.Dispose();
-                        _executingLoop = _viewRoot.MainMenu;
-                        _viewRoot.MainMenu.IsActive = true;
+                        _viewRoot.LoseScreen.IsActive = true;
+                        _viewRoot.InGameView.IsActive = false;
+                        _executingLoop = _viewRoot.LoseScreen;
                         return;
                     }
 
                     break;
                     
+                case ILoseScreen loseScreen:
+                    _session.Visualize(loseScreen.Score);
+                    if (loseScreen.Restart.Clicked)
+                    {
+                        loseScreen.Restart.Release();
+                        _session.Restart();
+                        loseScreen.IsActive = false;
+                        _viewRoot.InGameView.IsActive = true;
+                        _executingLoop = _session;
+                    }
+                    
+                    if (loseScreen.ExitGame.Clicked)
+                    {
+                        loseScreen.ExitGame.Release();
+                        _session.Dispose();
+                        UnityEngine.Application.Quit();
+                        return;
+                    }
+
+                    if (loseScreen.ExitToMenu.Clicked)
+                    {
+                        loseScreen.ExitToMenu.Release();
+                        _viewRoot.LoseScreen.IsActive = false;
+                        _viewRoot.MainMenu.IsActive = true;
+                        _session.Dispose();
+                        _executingLoop = _viewRoot.MainMenu;
+                        return;
+                    }
+                    break;
             }
             
             _executingLoop.Execute(deltaTime);
