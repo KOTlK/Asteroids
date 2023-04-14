@@ -37,7 +37,6 @@ namespace Game.Runtime.Ship
             _view.Dispose();
         }
 
-        public void DisposeOnAnimationEnd() => _view.DisposeOnAnimationEnd();
         public void DisplayHealth(float amount) => _shipInterface.DisplayHealth(amount);
 
         public void DisplayVelocity(Vector3 velocity) => _shipInterface.DisplayVelocity(velocity);

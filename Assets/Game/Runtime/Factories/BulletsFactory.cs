@@ -1,5 +1,4 @@
-﻿using Game.Runtime.Enemies;
-using Game.Runtime.Factories.View;
+﻿using Game.Runtime.Factories.View;
 using Game.Runtime.Physics;
 using Game.Runtime.Ship.Weapons;
 using UnityEngine;
@@ -30,14 +29,14 @@ namespace Game.Runtime.Factories
 
             var view = _bulletViewFactory.Create(startPosition);
             var bullet = new Bullet(
-                speed,
-                collider,
-                view,
-                this,
-                new Kamikaze(
+                new Body<IDamageable>(
                     collider,
                     _targetColliders,
-                    damage));
+                    startPosition),
+                view,
+                this,
+                speed,
+                damage);
             _destructor.Add(bullet);
             _collidersWorld.Add(collider, bullet);
             return bullet;

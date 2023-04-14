@@ -7,6 +7,10 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 1251110097957993257, guid: d6aef048296de6f42ace7002778b128b, type: 3}
+      propertyPath: m_PlayOnAwake
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 6764557095597215352, guid: d6aef048296de6f42ace7002778b128b, type: 3}
       propertyPath: m_Sprite
       value: 
@@ -57,7 +61,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6764557095630994709, guid: d6aef048296de6f42ace7002778b128b, type: 3}
       propertyPath: m_Name
-      value: SpaceShipFast Variant
+      value: SpaceShipFast
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: d6aef048296de6f42ace7002778b128b, type: 3}

@@ -1,5 +1,4 @@
 ﻿using Game.Runtime.Factories;
-using Game.Runtime.Physics;
 using UnityEngine;
 
 namespace Game.Runtime.Ship.Weapons

@@ -5,14 +5,12 @@ namespace Game.Runtime.Enemies
 {
     public class Kamikaze : IKamikaze
     {
-        private readonly ICollider _collider;
-        private readonly IColliderCaster<IDamageable> _colliderCaster;
+        private readonly IBody<IDamageable> _body;
         private readonly float _damage;
 
-        public Kamikaze(ICollider collider, IColliderCaster<IDamageable> colliderCaster, float damage)
+        public Kamikaze(IBody<IDamageable> body, float damage)
         {
-            _collider = collider;
-            _colliderCaster = colliderCaster;
+            _body = body;
             _damage = damage;
             Destroyed = false;
         }
@@ -21,7 +19,7 @@ namespace Game.Runtime.Enemies
         
         public void Execute(float deltaTime)
         {
-            var collision = _colliderCaster.Cast(_collider);
+            var collision = _body.Cast();
 
             if (collision.Occure)
             {

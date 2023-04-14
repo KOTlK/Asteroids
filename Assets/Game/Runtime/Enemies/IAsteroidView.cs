@@ -1,10 +1,9 @@
 ﻿using System;
-using Game.Runtime.View;
 using UnityEngine;
 
 namespace Game.Runtime.Enemies
 {
-    public interface IAsteroidView : IDisposable, IAnimationEndDisposable
+    public interface IAsteroidView : IDisposable
     {
         Vector3 Position { get; set; }
         void PlayExplosionAnimation();

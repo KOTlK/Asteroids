@@ -37,13 +37,13 @@ namespace Game.Runtime.GameLoop
             ICollidersWorld<IBullet> bulletsCollidersWorld;
             ICollidersWorld<IDamageable> shipCollidersWorld;
             IColliderCaster<IDamageable> shipColliderCaster;
-            ICollidersWorld<IDamageableTarget> enemiesCollidersWorld;
+            ICollidersWorld<IDamageable> enemiesCollidersWorld;
             IBulletsFactory enemyBulletsFactory;
             IEnemiesFactory enemiesFactory;
             IAsteroidsFactory asteroidsFactory;
             IBulletsFactory playerBulletsFactory;
             IPlayerShipFactory shipFactory;
-            var enemiesColliderCaster = new ColliderCaster<IDamageableTarget>(enemiesCollidersWorld = new CollidersWorld<IDamageableTarget>());
+            var enemiesColliderCaster = new ColliderCaster<IDamageable>(enemiesCollidersWorld = new CollidersWorld<IDamageable>());
 
             _loop = new DisposableGameObjectsGroup(new ILoop[]
             {
@@ -56,14 +56,15 @@ namespace Game.Runtime.GameLoop
                         _factories.EnemyBulletsViewFactory),
                     enemiesCollidersWorld,
                     shipColliderCaster,
-                    _viewRoot.Viewport),
+                    _viewRoot.Viewport,
+                    _score = new Score.Score(
+                        _viewRoot.InGameView)),
                 enemyBulletsFactory,
                 shipFactory = new PlayerShipFactory(
-                    playerBulletsFactory = new PlayerBulletsFactory(
+                    playerBulletsFactory = new BulletsFactory(
                         bulletsCollidersWorld,
                         enemiesColliderCaster,
-                        _factories.PlayerBulletsViewFactory,
-                        _score = new Score.Score(_viewRoot.InGameView)),
+                        _factories.PlayerBulletsViewFactory),
                     shipCollidersWorld,
                     _factories.PlayerShipViewFactory,
                     _viewRoot),
@@ -72,7 +73,8 @@ namespace Game.Runtime.GameLoop
                     _viewRoot.Viewport,
                     shipColliderCaster,
                     enemiesCollidersWorld,
-                    _factories.AsteroidViewFactory),
+                    _factories.AsteroidViewFactory,
+                    _score),
                 new AsteroidsSpawner(
                     asteroidsFactory,
                     _viewRoot.Viewport),

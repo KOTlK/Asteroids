@@ -1,15 +1,13 @@
-﻿using UnityEngine;
+﻿using Game.Runtime.Factories.View.Explosions;
+using UnityEngine;
 
 namespace Game.Runtime.Ship
 {
     public class StandardShip : MonoBehaviour, IShipView
     {
         [SerializeField] private Transform _gunPivot;
-        [SerializeField] private Animator _animator;
-
-        private readonly int _explosionHash = Animator.StringToHash("Explosion");
-
-        private bool _destroyOnAnimationEnd = false;
+        
+        private Explosion _explosion;
 
         public Vector3 Position
         {
@@ -18,30 +16,20 @@ namespace Game.Runtime.Ship
         }
 
         public Vector3 Pivot => _gunPivot.position;
+
+        public void Init(Explosion explosion)
+        {
+            _explosion = explosion;
+        }
+        
         public void PlayExplosionAnimation()
         {
-            _animator.Play(_explosionHash);
+            _explosion.Explode(Position);
         }
 
         public void Dispose()
         {
-            if (_destroyOnAnimationEnd == false)
-            {
-                Destroy(gameObject);
-            }
-        }
-
-        public virtual void DisposeOnAnimationEnd()
-        {
-            _destroyOnAnimationEnd = true;
-        }
-
-        public void Destroy()
-        {
-            if (_destroyOnAnimationEnd)
-            {
-                Destroy(gameObject);
-            }
+            Destroy(gameObject);
         }
     }
 }

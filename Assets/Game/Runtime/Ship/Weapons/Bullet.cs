@@ -1,5 +1,4 @@
-﻿using Game.Runtime.Enemies;
-using Game.Runtime.GameLoop;
+﻿using Game.Runtime.GameLoop;
 using Game.Runtime.Physics;
 using UnityEngine;
 
@@ -7,27 +6,25 @@ namespace Game.Runtime.Ship.Weapons
 {
     public class Bullet : IBullet
     {
+        private readonly IBody<IDamageable> _body;
         private readonly float _speed;
-        private readonly ICollider _collider;
+        private readonly float _damage;
         private readonly IBulletView _view;
         private readonly IObjectDestructor<IBullet> _destructor;
-        private readonly IKamikaze _kamikaze;
 
         private float _lifeTime;
+        private Vector3 _direction = Vector3.zero;
+
         private const float MaxLifeTime = 15f;
 
-        public Bullet(float speed, ICollider collider, IBulletView view, IObjectDestructor<IBullet> destructor, IKamikaze kamikaze)
+        public Bullet(IBody<IDamageable> body, IBulletView view, IObjectDestructor<IBullet> destructor, float speed, float damage)
         {
+            _body = body;
             _speed = speed;
-            _collider = collider;
+            _damage = damage;
             _view = view;
             _destructor = destructor;
-            _kamikaze = kamikaze;
-            _position = collider.Position;
         }
-
-        private Vector3 _position;
-        private Vector3 _direction = Vector3.zero;
 
         public void Execute(float deltaTime)
         {
@@ -39,17 +36,15 @@ namespace Game.Runtime.Ship.Weapons
                 return;
             }
 
-            _kamikaze.Execute(deltaTime);
-            
-            _position += _direction * (_speed * deltaTime);
+            _body.Position += _direction * (_speed * deltaTime);
+            _view.Position = _body.Position;
 
-            _collider.Position = _position;
-            _view.Position = _position;
+            var castHit = _body.Cast();
 
-            if (_kamikaze.Destroyed)
+            if (castHit.Occure)
             {
+                castHit.Target.ApplyDamage(_damage);
                 _view.PlayHitAnimation();
-                _view.DisposeOnAnimationEnd();
                 _destructor.Destroy(this);
             }
         }
@@ -57,6 +52,7 @@ namespace Game.Runtime.Ship.Weapons
         public void Shoot(Vector3 direction)
         {
             _direction = direction;
+            _view.PlayShootSound();
         }
 
         public void Dispose()

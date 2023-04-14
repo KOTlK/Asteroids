@@ -191,6 +191,51 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 4
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &146498458
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 146498459}
+  - component: {fileID: 146498460}
+  m_Layer: 0
+  m_Name: AsteroidsExplosions
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &146498459
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 146498458}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 1485433364}
+  m_RootOrder: 4
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &146498460
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 146498458}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a48ce23312c74ad28b7890a3c68367d7, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _prefab: {fileID: 9086255365958631976, guid: a47fac2d8875fe644ba87cf67e1f9589, type: 3}
 --- !u!1 &290608896
 GameObject:
   m_ObjectHideFlags: 0
@@ -1016,6 +1061,52 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _viewPrefab: {fileID: 2931843398500291289, guid: b641f49a50ea012469019b49f7c81664, type: 3}
+  _explosionsFactory: {fileID: 1021197859}
+--- !u!1 &1021197857
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1021197858}
+  - component: {fileID: 1021197859}
+  m_Layer: 0
+  m_Name: BulletsExplosions
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1021197858
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1021197857}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 1485433364}
+  m_RootOrder: 3
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1021197859
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1021197857}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a48ce23312c74ad28b7890a3c68367d7, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _prefab: {fileID: 5943555627275931900, guid: 6beebcf612a364146b2b5954983c586a, type: 3}
 --- !u!1 &1142185599
 GameObject:
   m_ObjectHideFlags: 0
@@ -1473,6 +1564,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _viewPrefab: {fileID: 2428399066137955342, guid: 24d9543f1efcfb84b98d60fa57f4b176, type: 3}
+  _explosionsFactory: {fileID: 1021197859}
 --- !u!224 &1387599255 stripped
 RectTransform:
   m_CorrespondingSourceObject: {fileID: 5998161845347657433, guid: a4fc4659adbe09d42900145f54a274ff, type: 3}
@@ -1577,6 +1669,9 @@ Transform:
   m_Children:
   - {fileID: 1248895610}
   - {fileID: 823375037}
+  - {fileID: 1770519051}
+  - {fileID: 1021197858}
+  - {fileID: 146498459}
   m_Father: {fileID: 1651081543}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -1603,6 +1698,7 @@ MonoBehaviour:
   - {fileID: 8426462481270375630, guid: 9d073b1504c3f864ab4daeaba760f44c, type: 3}
   - {fileID: 6154649516160470350, guid: 0c15c22dffcf3144eb9c1e337dc19774, type: 3}
   - {fileID: 7942574827183077387, guid: e1eac4da1174f404f8643efe8efdc99e, type: 3}
+  _explosionsFactory: {fileID: 146498460}
 --- !u!114 &1485433366
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1617,6 +1713,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _prefabs:
   - {fileID: 6279061692907111727, guid: b12601b30426d2348aa444af73fadc8b, type: 3}
+  _explosionsFactory: {fileID: 1770519050}
 --- !u!114 &1485433367
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1964,6 +2061,51 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1762761185}
   m_CullTransparentMesh: 1
+--- !u!1 &1770519049
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1770519051}
+  - component: {fileID: 1770519050}
+  m_Layer: 0
+  m_Name: ShipExplosions
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &1770519050
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1770519049}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a48ce23312c74ad28b7890a3c68367d7, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _prefab: {fileID: 9086255365958631976, guid: a47fac2d8875fe644ba87cf67e1f9589, type: 3}
+--- !u!4 &1770519051
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1770519049}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 1485433364}
+  m_RootOrder: 2
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1857688273
 GameObject:
   m_ObjectHideFlags: 0

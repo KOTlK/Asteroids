@@ -13,17 +13,23 @@ namespace Game.Runtime.Factories
         private readonly ExecutableObjectDestructor<Asteroid> _destructor = new();
         private readonly IViewport _viewport;
         private readonly IColliderCaster<IDamageable> _targetColliders;
-        private readonly ICollidersWorld<IDamageableTarget> _asteroidsWorld;
+        private readonly ICollidersWorld<IDamageable> _asteroidsWorld;
         private readonly IAsteroidViewFactory _asteroidViewFactory;
+        private readonly IScore _score;
 
         private const float Radius = 0.3f;
 
-        public AsteroidFactory(IViewport viewport, IColliderCaster<IDamageable> targetColliders, ICollidersWorld<IDamageableTarget> asteroidsWorld, IAsteroidViewFactory asteroidViewFactory)
+        public AsteroidFactory(IViewport viewport,
+            IColliderCaster<IDamageable> targetColliders,
+            ICollidersWorld<IDamageable> asteroidsWorld,
+            IAsteroidViewFactory asteroidViewFactory,
+            IScore score)
         {
             _viewport = viewport;
             _targetColliders = targetColliders;
             _asteroidsWorld = asteroidsWorld;
             _asteroidViewFactory = asteroidViewFactory;
+            _score = score;
         }
 
         public Asteroid Create(float speed, float damage, Vector3 startPosition)
@@ -36,14 +42,15 @@ namespace Game.Runtime.Factories
             });
             var asteroid = new Asteroid(
                 view,
-                _viewport,
-                this,
-                collider,
-                speed,
-                new Kamikaze(
+                new Body<IDamageable>(
                     collider,
                     _targetColliders,
-                    damage));
+                    startPosition),
+                this,
+                _viewport,
+                _score,
+                speed,
+                damage);
 
             _destructor.Add(asteroid);
             _asteroidsWorld.Add(collider, asteroid);

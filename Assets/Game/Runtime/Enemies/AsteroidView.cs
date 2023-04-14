@@ -1,14 +1,11 @@
-﻿using UnityEngine;
+﻿using Game.Runtime.Factories.View.Explosions;
+using UnityEngine;
 
 namespace Game.Runtime.Enemies
 {
     public class AsteroidView : MonoBehaviour, IAsteroidView
     {
-        [SerializeField] private Animator _animator;
-
-        private bool _disposeOnAnimationEnd = false;
-
-        private readonly int _explosionHash = Animator.StringToHash("Explosion");
+        private ExplosionsFactory _explosionsFactory;
 
         public Vector3 Position
         {
@@ -16,25 +13,17 @@ namespace Game.Runtime.Enemies
             set => transform.position = value;
         }
 
-        public void PlayExplosionAnimation()
+        public void Init(ExplosionsFactory explosionsFactory)
         {
-            _animator.Play(_explosionHash);
+            _explosionsFactory = explosionsFactory;
         }
 
-        public void DisposeOnAnimationEnd()
+        public void PlayExplosionAnimation()
         {
-            _disposeOnAnimationEnd = true;
+            _explosionsFactory.Create().Explode(transform.position);
         }
 
         public void Dispose()
-        {
-            if (_disposeOnAnimationEnd == false)
-            {
-                Destroy();
-            }
-        }
-
-        public void Destroy()
         {
             Destroy(gameObject);
         }

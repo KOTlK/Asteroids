@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using Game.Runtime.Enemies;
 using Game.Runtime.Factories.View;
 using Game.Runtime.GameLoop.Score;
@@ -18,18 +17,25 @@ namespace Game.Runtime.Factories
     {
         private readonly IEnemyShipViewFactory _viewFactory;
         private readonly IBulletsFactory _bulletsFactory;
-        private readonly ICollidersWorld<IDamageableTarget> _collidersWorld;
+        private readonly ICollidersWorld<IDamageable> _collidersWorld;
         private readonly IColliderCaster<IDamageable> _targetColliders;
         private readonly IViewport _viewport;
+        private readonly IScore _score;
         private readonly ExecutableObjectDestructor<EnemyShip> _destructor = new();
 
-        public EnemiesFactory(IEnemyShipViewFactory viewFactory, IBulletsFactory bulletsFactory, ICollidersWorld<IDamageableTarget> collidersWorld, IColliderCaster<IDamageable> targetColliders, IViewport viewport)
+        public EnemiesFactory(IEnemyShipViewFactory viewFactory,
+            IBulletsFactory bulletsFactory,
+            ICollidersWorld<IDamageable> collidersWorld,
+            IColliderCaster<IDamageable> targetColliders,
+            IViewport viewport,
+            IScore score)
         {
             _viewFactory = viewFactory;
             _bulletsFactory = bulletsFactory;
             _collidersWorld = collidersWorld;
             _targetColliders = targetColliders;
             _viewport = viewport;
+            _score = score;
         }
 
         //temp
@@ -47,7 +53,7 @@ namespace Game.Runtime.Factories
             });
             var direction = Random.insideUnitCircle.normalized;
             var input = new EnemyShipInput(2f, 0.5f, direction);
-            
+
             var model = new EnemyShip(
                 new Ship.Ship(
                     new Health(view.Stats.MaxHealth),
@@ -67,9 +73,12 @@ namespace Game.Runtime.Factories
                 view,
                 this,
                 new Kamikaze(
-                    collider,
-                    _targetColliders,
-                    view.Stats.DamageOnCollision));
+                    new Body<IDamageable>(
+                        collider,
+                        _targetColliders,
+                        position),
+                    view.Stats.DamageOnCollision),
+                _score);
 
             _inputs.Add(input);
             _collidersWorld.Add(collider, model);

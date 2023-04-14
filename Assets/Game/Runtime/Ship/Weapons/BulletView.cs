@@ -1,45 +1,38 @@
-﻿using UnityEngine;
+﻿using Game.Runtime.Factories.View.Explosions;
+using UnityEngine;
 
 namespace Game.Runtime.Ship.Weapons
 {
     public class BulletView : MonoBehaviour, IBulletView
     {
-        [SerializeField] private Animator _animator;
-
-        private bool _disposeOnAnimationEnd = false;
-
-        private readonly int _explosionHash = Animator.StringToHash("Explosion");
+        [SerializeField] private AudioSource _shootSound;
         
+        private ExplosionsFactory _explosionsFactory;
+
         public Vector3 Position
         {
             get => transform.position;
             set => transform.position = value;
         }
 
-        public void PlayHitAnimation()
+        public void Init(ExplosionsFactory explosionsFactory)
         {
-            _animator.Play(_explosionHash);
+            _explosionsFactory = explosionsFactory;
         }
 
-        public void DisposeOnAnimationEnd()
+        public void PlayHitAnimation()
         {
-            _disposeOnAnimationEnd = true;
+            _explosionsFactory.Create().Explode(Position);
+        }
+
+        public void PlayShootSound()
+        {
+            _shootSound.Play();
         }
 
         public void Dispose()
         {
-            if (_disposeOnAnimationEnd)
-                return;
-            
             Destroy(gameObject);
-        }
-
-        public void Destroy()
-        {
-            if (_disposeOnAnimationEnd)
-            {
-                Destroy(gameObject);
-            }
         }
     }
 }

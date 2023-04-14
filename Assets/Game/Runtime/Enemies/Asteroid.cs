@@ -8,50 +8,53 @@ using UnityEngine;
 
 namespace Game.Runtime.Enemies
 {
-    public class Asteroid : ILoop, IDisposable, IDamageableTarget
+    public class Asteroid : ILoop, IDisposable, IDamageable
     {
         private readonly IAsteroidView _view;
+        private readonly IBody<IDamageable> _body;
         private readonly IObjectDestructor<Asteroid> _destructor;
-        private readonly ICollider _collider;
         private readonly IViewport _viewport;
+        private readonly IScore _score;
         private readonly float _speed;
-        private readonly IKamikaze _kamikaze;
+        private readonly float _damage;
 
-        private Vector3 _position;
-
-        public Asteroid(IAsteroidView view, IViewport viewport, IObjectDestructor<Asteroid> destructor, ICollider collider, float speed, IKamikaze kamikaze)
+        private int _scorePerKill;
+        
+        public Asteroid(IAsteroidView view,
+            IBody<IDamageable> body,
+            IObjectDestructor<Asteroid> destructor,
+            IViewport viewport,
+            IScore score,
+            float speed,
+            float damage)
         {
             _view = view;
+            _body = body;
             _destructor = destructor;
-            _collider = collider;
             _viewport = viewport;
+            _score = score;
             _speed = speed;
-            _kamikaze = kamikaze;
-            _position = collider.Position;
-            ScorePerKill = new System.Random().Next(1, 5);
+            _damage = damage;
+            _scorePerKill = new System.Random().Next(1, 5);
         }
 
-        public int ScorePerKill { get; }
         public bool IsDead { get; private set; } = false;
-
-
+        
         public void Execute(float deltaTime)
         {
-            _position += Vector3.down * (_speed * deltaTime);
+            _body.Position += Vector3.down * (_speed * deltaTime);
+            _view.Position = _body.Position;
 
-            _view.Position = _position;
-            _collider.Position = _position;
+            var castHit = _body.Cast();
 
-            _kamikaze.Execute(deltaTime);
-
-            if (_kamikaze.Destroyed)
+            if (castHit.Occure)
             {
+                castHit.Target.ApplyDamage(_damage);
                 _view.PlayExplosionAnimation();
-                _view.DisposeOnAnimationEnd();
                 _destructor.Destroy(this);
             }
 
-            var viewportPosition = _viewport.WorldToViewport(_position);
+            var viewportPosition = _viewport.WorldToViewport(_body.Position);
             if (viewportPosition.y < -1.5f)
             {
                 _destructor.Destroy(this);
@@ -67,8 +70,8 @@ namespace Game.Runtime.Enemies
         public void ApplyDamage(float amount)
         {
             IsDead = true;
+            _score.Add(_scorePerKill);
             _view.PlayExplosionAnimation();
-            _view.DisposeOnAnimationEnd();
             _destructor.Destroy(this);
         }
     }
