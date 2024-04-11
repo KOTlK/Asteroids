@@ -1,5 +1,7 @@
 # Asteroids
 
+## (⚠WARNING!!!⚠) Never try this piece of shit programming style (⚠WARNING!!!⚠)
+
 Asteroids like game, shoot enemies, earn score. Written in pure OOP. No engine dependencies in game logic(only vectors and math for simplicity). No any MVX/ECS patterns.
 
 ## *MainMenu*
